@@ -31,7 +31,37 @@ entry:
     mov     ss,ax
     mov     sp,0x7c00
     mov     ds,ax
+
+; ディスクの読み込み
+    mov     ax,0x0820
     mov     es,ax
+    mov     ch,0
+    mov     dh,0
+    mov     cl,2
+    mov     si,0        ; 失敗回数をカウントするレジスタ
+
+retry:
+    mov     ah,0x02
+    mov     al,1
+    mov     bx,0
+    mov     dl,0x00
+    int     0x13
+    jnc     fin         ; 読み込みに成功したらfinへ
+    add     si,1
+    cmp     si,5        ; 5回失敗したらload error
+    jae     error
+    mov     ah,0x00
+    mov     dl,0x00
+    int     0x13
+    jmp     retry
+
+    mov     es,ax
+
+fin:
+    hlt
+    jmp     fin
+
+error:
 
     mov     si,msg
 
@@ -45,20 +75,10 @@ putloop:
     int     0x10
     jmp     putloop
 
-fin:
-    hlt
-    jmp     fin
-
 msg:
     db      0x0a, 0x0a
-    db      "hello, world"
+    db      "load error"
     db      0x0a
     db      0
     times   0x7dfe-0x7c00-($-$$) db 0
     db      0x55, 0xaa
-
-; ブートセクタ以外
-    db      0xf0, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00
-    times 4600 db 0
-    db      0xf0, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00
-    times 1469432 db 0
