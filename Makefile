@@ -25,5 +25,8 @@ $(BUILD_DIR)/%.asm.o:%.asm|$(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir $@
 
-run:os.img
+run:$(IMG_FILE)
 	$(VIEWER) -drive file=$<,format=raw,if=floppy
+
+clean:
+	rm -rf $(BUILD_DIR)
