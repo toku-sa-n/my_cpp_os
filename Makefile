@@ -27,3 +27,6 @@ $(BUILD_DIR):
 
 run:os.img
 	$(VIEWER) -drive file=$<,format=raw,if=floppy
+
+clean:
+	rm -rf $(BUILD_DIR)
