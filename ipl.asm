@@ -1,5 +1,9 @@
+; このプログラムが読み込まれる場所の指定
+    org     0x7c00
+
 ; FAT12のための記述
-    db      0xeb, 0x4e, 0x90
+    jmp     entry
+    db      0x90
     db      "HELLOIPL"  ; ブートセクタの名前
     dw      512         ; 1セクタの大きさ
     db      1           ; クラスタの大きさ
@@ -20,22 +24,37 @@
     times 18 db 0
 
 ; プログラム本体
-    db      0xb8, 0x00, 0x00, 0x8e, 0xd0, 0xbc, 0x00, 0x7c
-    db      0x8e, 0xd8, 0x8e, 0xc0, 0xbe, 0x74, 0x7c, 0x8a
-    db      0x04, 0x83, 0xc6, 0x01, 0x3c, 0x00, 0x74, 0x09
-    db      0xb4, 0x0e, 0xbb, 0x0f, 0x00, 0xcd, 0x10, 0xeb
-    db      0xee, 0xf4, 0xeb, 0xfd
+entry:
 
-; メッセージ部分
-    db      0x0a, 0x0a   ; 改行2つ
+; レジスタ初期化
+    mov     ax,0
+    mov     ss,ax
+    mov     sp,0x7c00
+    mov     ds,ax
+    mov     es,ax
+
+    mov     si,msg
+
+putloop:
+    mov     al,[si]
+    add     si,1
+    cmp     al,0
+    je      fin
+    mov     ah,0x0e
+    mov     bx,15
+    int     0x10
+    jmp     putloop
+
+fin:
+    hlt
+    jmp     fin
+
+msg:
+    db      0x0a, 0x0a
     db      "hello, world"
     db      0x0a
     db      0
-
-;  $: その行の最初
-; $$: 現在のセクションの最初
-    times   0x1fe-($-$$) db 0
-
+    times   0x7dfe-0x7c00-($-$$) db 0
     db      0x55, 0xaa
 
 ; ブートセクタ以外
