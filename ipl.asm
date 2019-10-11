@@ -38,6 +38,8 @@ entry:
     mov     ch,0
     mov     dh,0
     mov     cl,2
+
+readloop:
     mov     si,0        ; 失敗回数をカウントするレジスタ
 
 retry:
@@ -46,7 +48,7 @@ retry:
     mov     bx,0
     mov     dl,0x00
     int     0x13
-    jnc     fin         ; 読み込みに成功したらfinへ
+    jnc     next        ; 読み込みに成功したらfinへ
     add     si,1
     cmp     si,5        ; 5回失敗したらload error
     jae     error
@@ -54,6 +56,14 @@ retry:
     mov     dl,0x00
     int     0x13
     jmp     retry
+
+next:
+    mov     ax,es
+    add     ax,0x0020
+    mov     es,ax
+    add     cl,1
+    cmp     cl,18
+    jbe     readloop    ; CL <= 18ならジャンプ
 
     mov     es,ax
 
