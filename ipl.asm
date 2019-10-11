@@ -1,3 +1,6 @@
+; 定義
+cyls    equ 10
+
 ; このプログラムが読み込まれる場所の指定
     org     0x7c00
 
@@ -64,6 +67,14 @@ next:
     add     cl,1
     cmp     cl,18
     jbe     readloop    ; CL <= 18ならジャンプ
+    mov     cl,1
+    add     dh,1
+    cmp     dh,2
+    jb      readloop    ; DH < 2ならジャンプ
+    mov     dh,0
+    add     ch,1
+    cmp     ch,cyls
+    jb      readloop
 
     mov     es,ax
 
