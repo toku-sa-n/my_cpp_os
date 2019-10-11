@@ -35,18 +35,18 @@ entry:
 ; ディスクの読み込み
     mov     ax,0x0820
     mov     es,ax
-    mov     ch,0
-    mov     dh,0
-    mov     cl,2
+    mov     ch,0        ; シリンダ0
+    mov     dh,0        ; ヘッド0
+    mov     cl,2        ; セクタ0
 
 readloop:
     mov     si,0        ; 失敗回数をカウントするレジスタ
 
 retry:
-    mov     ah,0x02
-    mov     al,1
+    mov     ah,0x02     ; ディスク読み込み
+    mov     al,1        ; 1セクタ分
     mov     bx,0
-    mov     dl,0x00
+    mov     dl,0x00     ; Aドライブ
     int     0x13
     jnc     next        ; 読み込みに成功したらfinへ
     add     si,1
@@ -54,7 +54,7 @@ retry:
     jae     error
     mov     ah,0x00
     mov     dl,0x00
-    int     0x13
+    int     0x13        ; ドライブリセット
     jmp     retry
 
 next:
