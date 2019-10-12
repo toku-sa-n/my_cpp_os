@@ -76,7 +76,8 @@ next:
     cmp     ch,cyls
     jb      readloop
 
-    mov     es,ax
+    mov     [0x0ff0],ch
+    jmp     0xc200
 
 fin:
     hlt
