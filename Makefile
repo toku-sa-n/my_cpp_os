@@ -16,11 +16,11 @@ CAT				= cat
 
 .PHONY=run
 
-$(IMG_FILE):$(IPL_FILE) $(MAIN_FILE)|$(BUILD_DIR)
+$(IMG_FILE):$(IPL_FILE) $(MAIN_FILE) Makefile|$(BUILD_DIR)
 	mformat -f 1440 -C -B $(IPL_FILE) -i $@ ::
 	mcopy $(MAIN_FILE) -i $@ ::
 
-$(BUILD_DIR)/%.asm.o:%.asm|$(BUILD_DIR)
+$(BUILD_DIR)/%.asm.o:%.asm Makefile|$(BUILD_DIR)
 	$(ASMC) -o $@ $<
 
 $(BUILD_DIR):
