@@ -11,7 +11,8 @@ SECTIONS
         LONG(SIZEOF(.data))
         LONG(LOADADDR(.data))
         LONG(0xE9000000)
-        /* LONG(os_main - 0x20) */
+        LONG(0)
+        /* LONG(ADDR(os_main) - 0x20) */
         LONG(0)
     }
 
