@@ -32,11 +32,28 @@ void os_main()
 {
     init_palette();
 
-    char* p = (char*)0xa0000;
+    unsigned char* vram = (unsigned char*)0xa0000;
 
-    draw_box((unsigned char*)p, 320, kColorFF0000, 20, 20, 120, 120);
-    draw_box((unsigned char*)p, 320, kColor00FF00, 70, 50, 170, 150);
-    draw_box((unsigned char*)p, 320, kColor0000FF, 120, 80, 220, 180);
+    const int vram_x_len = 320, vram_y_len = 200;
+
+    // clang-format off
+    draw_box(vram, vram_x_len, kColor008484,               0,               0, vram_x_len -  1, vram_y_len - 29);
+    draw_box(vram, vram_x_len, kColorC6C6C6,               0, vram_y_len - 28, vram_x_len -  1, vram_y_len - 28);
+    draw_box(vram, vram_x_len, kColorFFFFFF,               0, vram_y_len - 27, vram_x_len -  1, vram_y_len - 27);
+    draw_box(vram, vram_x_len, kColorC6C6C6,               0, vram_y_len - 26, vram_x_len -  1, vram_y_len -  1);
+
+    draw_box(vram, vram_x_len, kColorFFFFFF,               3, vram_y_len - 24,              59, vram_y_len - 24);
+    draw_box(vram, vram_x_len, kColorFFFFFF,               2, vram_y_len - 24,               2, vram_y_len -  4);
+    draw_box(vram, vram_x_len, kColor848484,               3, vram_y_len -  4,              59, vram_y_len -  4);
+    draw_box(vram, vram_x_len, kColor848484,              59, vram_y_len - 23,              59, vram_y_len -  5);
+    draw_box(vram, vram_x_len, kColor000000,               2, vram_y_len -  3,              59, vram_y_len -  3);
+    draw_box(vram, vram_x_len, kColor000000,              60, vram_y_len - 24,              60, vram_y_len -  3);
+
+    draw_box(vram, vram_x_len, kColor848484, vram_x_len - 47, vram_y_len - 24, vram_x_len -  4, vram_y_len - 24);
+    draw_box(vram, vram_x_len, kColor848484, vram_x_len - 47, vram_y_len - 23, vram_x_len - 47, vram_y_len -  4);
+    draw_box(vram, vram_x_len, kColorFFFFFF, vram_x_len - 47, vram_y_len -  3, vram_x_len -  4, vram_y_len -  3);
+    draw_box(vram, vram_x_len, kColorFFFFFF, vram_x_len -  3, vram_y_len - 24, vram_x_len -  3, vram_y_len -  3);
+    // clang-format on
 
     while (1) {
         io_hlt();
