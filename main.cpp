@@ -27,14 +27,23 @@ const int kColor840084 = 13;
 const int kColor008484 = 14;
 const int kColor848484 = 15;
 
+struct BootInfo {
+    char cyls, leds, vmode, reserve;
+    short vram_x_len, vram_y_len;
+    unsigned char* vram;
+};
+
 // Don't move os_main because this function must come after the label `bootpack:' which is in head.asm
 void os_main()
 {
     init_palette();
 
-    unsigned char* vram = (unsigned char*)0xa0000;
+    struct BootInfo* boot_info = (struct BootInfo*)0x0ff0;
 
-    const int vram_x_len = 320, vram_y_len = 200;
+    unsigned char* vram = boot_info->vram;
+
+    const int vram_x_len = boot_info->vram_x_len;
+    const int vram_y_len = boot_info->vram_y_len;
 
     // clang-format off
     draw_box(vram, vram_x_len, kColor008484,               0,               0, vram_x_len -  1, vram_y_len - 29);
