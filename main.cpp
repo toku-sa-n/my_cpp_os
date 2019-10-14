@@ -10,6 +10,7 @@ void set_palette(int start, int end, unsigned char* rgb);
 void init_palette();
 void draw_box(unsigned char* vram, int vram_x_len, unsigned char color, int x0, int y0, int x1, int y1);
 void os_putchar(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* font);
+void init_screen(unsigned char* vram, int vram_x_len, int vram_y_len);
 
 const int kColor000000 = 0;
 const int kColorFF0000 = 1;
@@ -41,11 +42,19 @@ void os_main()
 
     struct BootInfo* boot_info = (struct BootInfo*)0x0ff0;
 
-    unsigned char* vram = boot_info->vram;
+    init_screen(boot_info->vram, boot_info->vram_x_len, boot_info->vram_y_len);
 
-    const int vram_x_len = boot_info->vram_x_len;
-    const int vram_y_len = boot_info->vram_y_len;
+    static unsigned char font_A[] = {
+        0x00, 0x18, 0x18, 0x18, 0x18, 0x24, 0x24, 0x24, 0x24, 0x7e, 0x42, 0x42, 0x42, 0xe7, 0x00, 0x00
+    };
+    os_putchar(boot_info->vram, boot_info->vram_x_len, 10, 10, kColorFFFFFF, font_A);
+    while (1) {
+        io_hlt();
+    }
+}
 
+void init_screen(unsigned char* vram, int vram_x_len, int vram_y_len)
+{
     // clang-format off
     draw_box(vram, vram_x_len, kColor008484,               0,               0, vram_x_len -  1, vram_y_len - 29);
     draw_box(vram, vram_x_len, kColorC6C6C6,               0, vram_y_len - 28, vram_x_len -  1, vram_y_len - 28);
@@ -64,14 +73,6 @@ void os_main()
     draw_box(vram, vram_x_len, kColorFFFFFF, vram_x_len - 47, vram_y_len -  3, vram_x_len -  4, vram_y_len -  3);
     draw_box(vram, vram_x_len, kColorFFFFFF, vram_x_len -  3, vram_y_len - 24, vram_x_len -  3, vram_y_len -  3);
     // clang-format on
-
-    static unsigned char font_A[] = {
-        0x00, 0x18, 0x18, 0x18, 0x18, 0x24, 0x24, 0x24, 0x24, 0x7e, 0x42, 0x42, 0x42, 0xe7, 0x00, 0x00
-    };
-    os_putchar(boot_info->vram, boot_info->vram_x_len, 10, 10, kColorFFFFFF, font_A);
-    while (1) {
-        io_hlt();
-    }
 }
 
 void set_palette(int start, int end, unsigned char* rgb)
