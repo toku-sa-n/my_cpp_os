@@ -8,7 +8,7 @@ void os_main();
 }
 void set_palette(int start, int end, unsigned char* rgb);
 void init_palette();
-void draw_box(unsigned char* vram, int x_size, unsigned char color, int x0, int y0, int x1, int y1);
+void draw_box(unsigned char* vram, int vram_x_len, unsigned char color, int x0, int y0, int x1, int y1);
 
 const int kColor000000 = 0;
 const int kColorFF0000 = 1;
@@ -87,11 +87,11 @@ void init_palette()
     set_palette(0, 15, rgb_table);
 }
 
-void draw_box(unsigned char* vram, int x_size, unsigned char color, int x0, int y0, int x1, int y1)
+void draw_box(unsigned char* vram, int vram_x_len, unsigned char color, int x0, int y0, int x1, int y1)
 {
     for (int y = y0; y <= y1; y++) {
         for (int x = x0; x <= x1; x++) {
-            vram[y * x_size + x] = color;
+            vram[y * vram_x_len + x] = color;
         }
     }
 }
