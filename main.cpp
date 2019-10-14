@@ -8,6 +8,24 @@ void os_main();
 }
 void set_palette(int start, int end, unsigned char* rgb);
 void init_palette();
+void draw_box(unsigned char* vram, int x_size, unsigned char c, int x0, int y0, int x1, int y1);
+
+const int kColor000000 = 0;
+const int kColorFF0000 = 1;
+const int kColor00FF00 = 2;
+const int kColorFFFF00 = 3;
+const int kColor0000FF = 4;
+const int kColorFF00FF = 5;
+const int kColor00FFFF = 6;
+const int kColorFFFFFF = 7;
+const int kColorC6C6C6 = 8;
+const int kColor840000 = 9;
+const int kColor008400 = 10;
+const int kColor848400 = 11;
+const int kColor000084 = 12;
+const int kColor840084 = 13;
+const int kColor008484 = 14;
+const int kColor848484 = 15;
 
 // Don't move os_main because this function must come after the label `bootpack:' which is in head.asm
 void os_main()
@@ -16,9 +34,9 @@ void os_main()
 
     char* p = (char*)0xa0000;
 
-    for (int i = 0; i <= 0xffff; i++) {
-        p[i] = i & 0x0f;
-    }
+    draw_box((unsigned char*)p, 320, kColorFF0000, 20, 20, 120, 120);
+    draw_box((unsigned char*)p, 320, kColor00FF00, 70, 50, 170, 150);
+    draw_box((unsigned char*)p, 320, kColor0000FF, 120, 80, 220, 180);
 
     while (1) {
         io_hlt();
@@ -67,4 +85,13 @@ void init_palette()
     };
 
     set_palette(0, 15, rgb_table);
+}
+
+void draw_box(unsigned char* vram, int x_size, unsigned char c, int x0, int y0, int x1, int y1)
+{
+    for (int y = y0; y <= y1; y++) {
+        for (int x = x0; x <= x1; x++) {
+            vram[y * x_size + x] = c;
+        }
+    }
 }
