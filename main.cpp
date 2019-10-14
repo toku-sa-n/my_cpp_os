@@ -9,6 +9,7 @@ void os_main();
 void set_palette(int start, int end, unsigned char* rgb);
 void init_palette();
 void draw_box(unsigned char* vram, int vram_x_len, unsigned char color, int x0, int y0, int x1, int y1);
+void os_putchar(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* font);
 
 const int kColor000000 = 0;
 const int kColorFF0000 = 1;
@@ -64,6 +65,10 @@ void os_main()
     draw_box(vram, vram_x_len, kColorFFFFFF, vram_x_len -  3, vram_y_len - 24, vram_x_len -  3, vram_y_len -  3);
     // clang-format on
 
+    static unsigned char font_A[] = {
+        0x00, 0x18, 0x18, 0x18, 0x18, 0x24, 0x24, 0x24, 0x24, 0x7e, 0x42, 0x42, 0x42, 0xe7, 0x00, 0x00
+    };
+    os_putchar(boot_info->vram, boot_info->vram_x_len, 10, 10, kColorFFFFFF, font_A);
     while (1) {
         io_hlt();
     }
@@ -118,6 +123,19 @@ void draw_box(unsigned char* vram, int vram_x_len, unsigned char color, int x0, 
     for (int y = y0; y <= y1; y++) {
         for (int x = x0; x <= x1; x++) {
             vram[y * vram_x_len + x] = color;
+        }
+    }
+}
+
+void os_putchar(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* font)
+{
+    for (int i = 0; i < 16; i++) {
+        unsigned char* p = vram + (y + i) * vram_x_len + x;
+        char d = font[i];
+        for (int j = 0; j < 8; j++) {
+            if (d & (1 << (7 - j))) {
+                p[j] = color;
+            }
         }
     }
 }
