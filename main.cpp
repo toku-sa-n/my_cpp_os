@@ -4,7 +4,6 @@ void io_cli();
 void io_out8(int port, int data);
 int io_load_eflags();
 void io_store_eflags(int eflags);
-void os_main();
 }
 void set_palette(int start, int end, unsigned char* rgb);
 void init_palette();
@@ -36,7 +35,7 @@ struct BootInfo {
 };
 
 // Don't move os_main because this function must come after the label `bootpack:' which is in head.asm
-void os_main()
+extern "C" void os_main()
 {
     init_palette();
 
