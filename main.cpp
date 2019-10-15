@@ -34,7 +34,6 @@ struct BootInfo {
     unsigned char* vram;
 };
 
-// Don't move os_main because this function must come after the label `bootpack:' which is in head.asm
 extern "C" void os_main()
 {
     init_palette();
