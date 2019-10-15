@@ -9,6 +9,7 @@ void set_palette(int start, int end, unsigned char* rgb);
 void init_palette();
 void draw_box(unsigned char* vram, int vram_x_len, unsigned char color, int x0, int y0, int x1, int y1);
 void os_putchar(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* font);
+void os_puts(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* s);
 void init_screen(unsigned char* vram, int vram_x_len, int vram_y_len);
 
 const int kColor000000 = 0;
@@ -34,6 +35,8 @@ struct BootInfo {
     unsigned char* vram;
 };
 
+extern unsigned char fonts[4096];
+
 extern "C" void os_main()
 {
     init_palette();
@@ -42,13 +45,9 @@ extern "C" void os_main()
 
     init_screen(boot_info->vram, boot_info->vram_x_len, boot_info->vram_y_len);
 
-    extern unsigned char fonts[4096];
-    os_putchar(boot_info->vram, boot_info->vram_x_len, 8, 8, kColorFFFFFF, fonts + 'A' * 16);
-    os_putchar(boot_info->vram, boot_info->vram_x_len, 16, 8, kColorFFFFFF, fonts + 'B' * 16);
-    os_putchar(boot_info->vram, boot_info->vram_x_len, 24, 8, kColorFFFFFF, fonts + 'C' * 16);
-    os_putchar(boot_info->vram, boot_info->vram_x_len, 40, 8, kColorFFFFFF, fonts + '1' * 16);
-    os_putchar(boot_info->vram, boot_info->vram_x_len, 48, 8, kColorFFFFFF, fonts + '2' * 16);
-    os_putchar(boot_info->vram, boot_info->vram_x_len, 56, 8, kColorFFFFFF, fonts + '3' * 16);
+    os_puts(boot_info->vram, boot_info->vram_x_len, 8, 8, kColorFFFFFF, (unsigned char*)"ABC 123");
+    os_puts(boot_info->vram, boot_info->vram_x_len, 31, 31, kColor000000, (unsigned char*)"My C++ OS");
+    os_puts(boot_info->vram, boot_info->vram_x_len, 30, 30, kColorFFFFFF, (unsigned char*)"My C++ OS");
     while (1) {
         io_hlt();
     }
@@ -139,5 +138,14 @@ void os_putchar(unsigned char* vram, int vram_x_len, int x, int y, char color, u
                 p[j] = color;
             }
         }
+    }
+}
+
+// This function doesn't put '\n' at the end of sentence.
+void os_puts(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* s)
+{
+    for (; *s != 0x00; s++) {
+        os_putchar(vram, vram_x_len, x, y, color, fonts + *s * 16);
+        x += 8;
     }
 }
