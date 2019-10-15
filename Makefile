@@ -12,7 +12,7 @@ BODY_COMPONENTS	:= $(addprefix $(BUILD_DIR)/, $(CXX_SRC:%.cpp=%.cpp.o))
 BODY_COMPONENTS += $(addprefix $(BUILD_DIR)/, $(ASM_SRC:%.asm=%.asm.o))
 
 MAIN_FILE		:= $(BUILD_DIR)/os_main.o
-BODY_FILE		:= $(BUILD_DIR)/os_bosy.o
+BODY_FILE		:= $(BUILD_DIR)/os_body.o
 IMG_FILE		:= $(BUILD_DIR)/os.img
 
 CXX				= gcc
