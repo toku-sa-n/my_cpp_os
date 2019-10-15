@@ -42,10 +42,13 @@ extern "C" void os_main()
 
     init_screen(boot_info->vram, boot_info->vram_x_len, boot_info->vram_y_len);
 
-    static unsigned char font_A[] = {
-        0x00, 0x18, 0x18, 0x18, 0x18, 0x24, 0x24, 0x24, 0x24, 0x7e, 0x42, 0x42, 0x42, 0xe7, 0x00, 0x00
-    };
-    os_putchar(boot_info->vram, boot_info->vram_x_len, 10, 10, kColorFFFFFF, font_A);
+    extern unsigned char fonts[4096];
+    os_putchar(boot_info->vram, boot_info->vram_x_len, 8, 8, kColorFFFFFF, fonts + 'A' * 16);
+    os_putchar(boot_info->vram, boot_info->vram_x_len, 16, 8, kColorFFFFFF, fonts + 'B' * 16);
+    os_putchar(boot_info->vram, boot_info->vram_x_len, 24, 8, kColorFFFFFF, fonts + 'C' * 16);
+    os_putchar(boot_info->vram, boot_info->vram_x_len, 40, 8, kColorFFFFFF, fonts + '1' * 16);
+    os_putchar(boot_info->vram, boot_info->vram_x_len, 48, 8, kColorFFFFFF, fonts + '2' * 16);
+    os_putchar(boot_info->vram, boot_info->vram_x_len, 56, 8, kColorFFFFFF, fonts + '3' * 16);
     while (1) {
         io_hlt();
     }

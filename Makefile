@@ -3,7 +3,7 @@ BUILD_DIR		:= build
 IPL_SRC			:= ipl.asm
 HEAD_SRC		:= head.asm
 ASM_SRC			:= asm_func.asm
-CXX_SRC			:= main.cpp
+CXX_SRC			:= main.cpp fonts.cpp
 LD_SRC			:= os.ld
 
 IPL_FILE		:= $(addprefix $(BUILD_DIR)/, $(IPL_SRC:%.asm=%.asm.o))
