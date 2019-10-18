@@ -6,7 +6,7 @@ TEST_SRC		:= test_utils.cpp
 
 CXXFLAGS		:= -O2 -pipe -march=native
 
-test:$(BUILD_DIR)/utils_test|$(BUILD_DIR)
+run:$(BUILD_DIR)/utils_test|$(BUILD_DIR)
 	$(BUILD_DIR)/utils_test
 
 $(BUILD_DIR)/utils_test:$(TEST_SRC) $(TEST_TARGET_DIR)/$(TEST_TARGET)|$(BUILD_DIR)
