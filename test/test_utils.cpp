@@ -21,11 +21,14 @@ bool test_os_vsprintf(const char* format, ...)
     va_end(ap);
 
     auto error_msg = [=](std::string message) {
+        std::cout << std::endl;
+        std::cout << "--------------------------------" << std::endl;
         std::cout << message << std::endl;
         std::cout << "Format: " << format << std::endl;
         std::cout << std::endl;
         std::cout << "Expected: " << builtin_count << std::endl;
         std::cout << "Actual: " << os_count << std::endl;
+        std::cout << "--------------------------------" << std::endl;
     };
 
     if (os_count != builtin_count) {
