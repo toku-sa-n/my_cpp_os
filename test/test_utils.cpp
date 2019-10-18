@@ -11,12 +11,12 @@ bool test_os_vsprintf(const char* format, ...)
     va_list ap;
 
     va_start(ap, format);
-    char os_buf[kBufferSize];
+    char os_buf[kBufferSize] = { '\0' };
     int os_count = os_vsprintf(os_buf, format, ap);
     va_end(ap);
 
     va_start(ap, format);
-    char builtin_buf[kBufferSize];
+    char builtin_buf[kBufferSize] = { '\0' };
     int builtin_count = vsprintf(builtin_buf, format, ap);
     va_end(ap);
 
@@ -48,4 +48,5 @@ int main()
 {
     test_os_vsprintf("This");
     test_os_vsprintf("%d", 2);
+    test_os_vsprintf("%d", 35);
 }
