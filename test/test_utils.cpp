@@ -46,5 +46,6 @@ bool test_os_vsprintf(const char* format, ...)
 
 int main()
 {
+    test_os_vsprintf("This");
     test_os_vsprintf("%d", 2);
 }
