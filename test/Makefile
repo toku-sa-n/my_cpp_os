@@ -6,6 +6,8 @@ TEST_SRC		:= test_utils.cpp
 
 CXXFLAGS		:= -O2 -pipe -march=native
 
+.PHONY:run clean
+
 run:$(BUILD_DIR)/utils_test|$(BUILD_DIR)
 	$(BUILD_DIR)/utils_test
 
