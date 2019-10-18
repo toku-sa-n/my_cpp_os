@@ -17,7 +17,7 @@ bool test_os_vsprintf(const char* format, ...)
 
     va_start(ap, format);
     char builtin_buf[kBufferSize];
-    int builtin_count = os_vsprintf(builtin_buf, format, ap);
+    int builtin_count = vsprintf(builtin_buf, format, ap);
     va_end(ap);
 
     auto error_msg = [=](std::string message) {
