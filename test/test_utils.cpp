@@ -6,8 +6,9 @@ const int kBufferSize = 1024;
 
 int os_vsprintf(char* str, const char* format, va_list ap);
 
-bool test_os_vsprintf(const char* format, ...)
+bool test_os_vsprintf(int& num_test, int& num_success, const char* format, ...)
 {
+    num_test++;
     va_list ap;
 
     va_start(ap, format);
@@ -41,12 +42,17 @@ bool test_os_vsprintf(const char* format, ...)
         return false;
     }
 
+    num_success++;
     return true;
 }
 
 int main()
 {
-    test_os_vsprintf("This");
-    test_os_vsprintf("%d", 2);
-    test_os_vsprintf("%d", 35);
+    int num_test = 0, num_success = 0;
+    test_os_vsprintf(num_test, num_success, "This");
+    test_os_vsprintf(num_test, num_success, "%d", 2);
+    test_os_vsprintf(num_test, num_success, "%d", 35);
+
+    std::cout << "  The number of tests: " << num_test << std::endl;
+    std::cout << "The number of success: " << num_success << std::endl;
 }
