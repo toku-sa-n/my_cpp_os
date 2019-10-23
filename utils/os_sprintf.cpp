@@ -1,8 +1,7 @@
 #include <cstring>
-#include <iostream>
 #include <stdarg.h>
 
-static int int_to_chars(char* str, int n)
+static int int_to_chars(char** str, int n)
 {
     char buf[1024] = { '\0' };
 
@@ -21,7 +20,7 @@ static int int_to_chars(char* str, int n)
     }
 
     for (int i = 0; i < ptr; i++) {
-        *str++ = buf[i];
+        *(*str)++ = buf[i];
     }
 
     return digits;
@@ -39,7 +38,7 @@ int os_vsprintf(char* str, const char* format, va_list ap)
         }
 
         format += 2;
-        count += int_to_chars(str++, va_arg(ap, int));
+        count += int_to_chars(&str, va_arg(ap, int));
     }
 
     *str = '\0';
