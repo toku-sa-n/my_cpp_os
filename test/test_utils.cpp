@@ -57,6 +57,6 @@ int main()
     TEST_OS_VSPRINTF("%d", 123456789);
 #undef TEST_OS_VSPRINTF
 
-    std::cout << "  The number of tests: " << num_test << std::endl;
+    std::cout << "The number of tests  : " << num_test << std::endl;
     std::cout << "The number of success: " << num_success << std::endl;
 }
