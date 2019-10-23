@@ -54,6 +54,7 @@ int main()
     TEST_OS_VSPRINTF("This");
     TEST_OS_VSPRINTF("%d", 2);
     TEST_OS_VSPRINTF("%d", 35);
+    TEST_OS_VSPRINTF("%d", 123456789);
 #undef TEST_OS_VSPRINTF
 
     std::cout << "  The number of tests: " << num_test << std::endl;
