@@ -49,9 +49,12 @@ bool test_os_vsprintf(int& num_test, int& num_success, const char* format, ...)
 int main()
 {
     int num_test = 0, num_success = 0;
-    test_os_vsprintf(num_test, num_success, "This");
-    test_os_vsprintf(num_test, num_success, "%d", 2);
-    test_os_vsprintf(num_test, num_success, "%d", 35);
+#define TEST_OS_VSPRINTF(format, ...) \
+    test_os_vsprintf(num_test, num_success, format, ##__VA_ARGS__)
+    TEST_OS_VSPRINTF("This");
+    TEST_OS_VSPRINTF("%d", 2);
+    TEST_OS_VSPRINTF("%d", 35);
+#undef TEST_OS_VSPRINTF
 
     std::cout << "  The number of tests: " << num_test << std::endl;
     std::cout << "The number of success: " << num_success << std::endl;
