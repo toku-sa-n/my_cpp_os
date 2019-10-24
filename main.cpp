@@ -12,6 +12,8 @@ void os_putchar(unsigned char* vram, int vram_x_len, int x, int y, char color, u
 void os_puts(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* s);
 void init_screen(unsigned char* vram, int vram_x_len, int vram_y_len);
 
+int os_sprintf(char* str, const char* format, ...);
+
 const int kColor000000 = 0;
 const int kColorFF0000 = 1;
 const int kColor00FF00 = 2;
@@ -48,6 +50,10 @@ extern "C" void os_main()
     os_puts(boot_info->vram, boot_info->vram_x_len, 8, 8, kColorFFFFFF, (unsigned char*)"ABC 123");
     os_puts(boot_info->vram, boot_info->vram_x_len, 31, 31, kColor000000, (unsigned char*)"My C++ OS");
     os_puts(boot_info->vram, boot_info->vram_x_len, 30, 30, kColorFFFFFF, (unsigned char*)"My C++ OS");
+
+    char s[40];
+    os_sprintf(s, "screen_x = %d", boot_info->vram_x_len);
+    os_puts(boot_info->vram, boot_info->vram_x_len, 16, 64, kColorFFFFFF, (unsigned char*)s);
     while (1) {
         io_hlt();
     }

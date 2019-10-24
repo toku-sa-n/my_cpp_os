@@ -5,11 +5,13 @@ HEAD_SRC		:= head.asm
 ASM_SRC			:= asm_func.asm
 CXX_SRC			:= main.cpp fonts.cpp
 LD_SRC			:= os.ld
+UTILS_SRC		:= $(shell ls utils/*.cpp|sed 's/utils\///')
 
 IPL_FILE		:= $(addprefix $(BUILD_DIR)/, $(IPL_SRC:%.asm=%.asm.o))
 HEAD_FILE		:= $(addprefix $(BUILD_DIR)/, $(HEAD_SRC:%.asm=%.asm.o))
 BODY_COMPONENTS	:= $(addprefix $(BUILD_DIR)/, $(CXX_SRC:%.cpp=%.cpp.o))
 BODY_COMPONENTS += $(addprefix $(BUILD_DIR)/, $(ASM_SRC:%.asm=%.asm.o))
+UTILS_FILE		:= $(addprefix $(BUILD_DIR)/utils/, $(UTILS_SRC:%.cpp=%.cpp.o))
 
 MAIN_FILE		:= $(BUILD_DIR)/os_main.o
 BODY_FILE		:= $(BUILD_DIR)/os_body.o
@@ -34,7 +36,8 @@ $(MAIN_FILE):$(HEAD_FILE) $(BODY_FILE) Makefile|$(BUILD_DIR)
 	$(CAT) $^ > $@
 
 $(BODY_FILE):$(BODY_COMPONENTS) $(LD_SRC) Makefile|$(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) -T $(LD_SRC) -o $@ $(BODY_COMPONENTS)
+	make -C utils/
+	$(CXX) $(CXXFLAGS) -T $(LD_SRC) -o $@ $(BODY_COMPONENTS) $(UTILS_FILE)
 
 $(BUILD_DIR)/asm_func.asm.o:asm_func.asm Makefile|$(BUILD_DIR)
 	$(ASMC) -g -f elf $< -o $@
