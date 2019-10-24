@@ -4,6 +4,9 @@ void io_cli();
 void io_out8(int port, int data);
 int io_load_eflags();
 void io_store_eflags(int eflags);
+
+void load_gdtr(int limit, int addr);
+void load_idtr(int limit, int addr);
 }
 void set_palette(int start, int end, unsigned char* rgb);
 void init_palette();
@@ -13,6 +16,7 @@ void os_puts(unsigned char* vram, int vram_x_len, int x, int y, char color, unsi
 void init_screen(unsigned char* vram, int vram_x_len, int vram_y_len);
 void init_mouse_cursor(unsigned char* mouse, char background_color);
 void draw_block(unsigned char* vram, int vram_x_len, int pic_size_x, int pic_size_y, int pic_pos_x, int pic_pos_y, char* buf, int buf_size_x);
+void init_gdt_idt();
 
 int os_sprintf(char* str, const char* format, ...);
 
@@ -39,11 +43,25 @@ struct BootInfo {
     unsigned char* vram;
 };
 
+struct SegmentDescriptor {
+    short limit_low, base_low;
+    char base_mid, access_right;
+    char limit_high, base_high;
+};
+
+struct GateDescriptor {
+    short offset_low, selector;
+    char dw_count, access_right;
+    short offset_high;
+};
+
 extern unsigned char fonts[4096];
 
 extern "C" void os_main()
 {
     init_palette();
+
+    init_gdt_idt();
 
     struct BootInfo* boot_info = (struct BootInfo*)0x0ff0;
 
@@ -66,6 +84,58 @@ extern "C" void os_main()
     while (1) {
         io_hlt();
     }
+}
+
+void set_segment_descriptor(struct SegmentDescriptor* sd, unsigned int limit, int base, int access_right)
+{
+    if (limit > 0xfffff) {
+        access_right |= 0x8000;
+        limit /= 0x1000;
+    }
+
+    // clang-format off
+    sd->limit_low    = limit & 0xffff;
+    sd->base_low     = base & 0xffff;
+    sd->base_mid     = (base >> 16) & 0xff;
+    sd->access_right = access_right & 0xff;
+    sd->limit_high   = ((limit >> 16) & 0x0f) | ((access_right >> 8) & 0xf0);
+    sd->base_high    = (base >> 24) & 0xff;
+    // clang-format on
+}
+
+void set_gate_descriptor(struct GateDescriptor* gd, int offset, int selector, int access_right)
+{
+    // clang-format off
+    gd->offset_low   = offset & 0xffff;
+    gd->selector     = selector;
+    gd->dw_count     = (access_right >> 8) & 0xff;
+    gd->access_right = access_right & 0xff;
+    gd->offset_high  = (offset >> 16) & 0xffff;
+    // clang-format on
+}
+
+void init_gdt_idt()
+{
+    // 0x270000 ~ 0x27ffff: GDT
+    struct SegmentDescriptor* gdt = (struct SegmentDescriptor*)0x00270000;
+
+    // Initialize all GDT segments
+    // Limit: 0, Base: 0, Access right: 0
+    for (int i = 0; i < 8192; i++) {
+        set_segment_descriptor(gdt + i, 0, 0, 0);
+    }
+
+    set_segment_descriptor(gdt + 1, 0xffffffff, 0x00000000, 0x4092);
+
+    // 0x002800: The start position of OS body file
+    set_segment_descriptor(gdt + 2, 0x0007ffff, 0x00280000, 0x409a);
+    load_gdtr(0xffff, 0x00270000);
+
+    struct GateDescriptor* idt = (struct GateDescriptor*)0x0026f800;
+    for (int i = 0; i < 256; i++) {
+        set_gate_descriptor(idt + i, 0, 0, 0);
+    }
+    load_idtr(0x7ff, 0x0026f800);
 }
 
 void draw_block(unsigned char* vram, int vram_x_len, int pic_size_x, int pic_size_y, int pic_pos_x, int pic_pos_y, char* buf, int buf_size_x)
