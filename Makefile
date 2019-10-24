@@ -1,3 +1,5 @@
+# TODO: Use -MMD -MP options for C++ header file
+
 BUILD_DIR		:= build
 
 IPL_SRC			:= ipl.asm
