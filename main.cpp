@@ -11,6 +11,8 @@ void draw_box(unsigned char* vram, int vram_x_len, unsigned char color, int x0, 
 void os_putchar(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* font);
 void os_puts(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* s);
 void init_screen(unsigned char* vram, int vram_x_len, int vram_y_len);
+void init_mouse_cursor(unsigned char* mouse, char background_color);
+void draw_block(unsigned char* vram, int vram_x_len, int pic_size_x, int pic_size_y, int pic_pos_x, int pic_pos_y, char* buf, int buf_size_x);
 
 int os_sprintf(char* str, const char* format, ...);
 
@@ -54,8 +56,62 @@ extern "C" void os_main()
     char s[40];
     os_sprintf(s, "screen_x = %d", boot_info->vram_x_len);
     os_puts(boot_info->vram, boot_info->vram_x_len, 16, 64, kColorFFFFFF, (unsigned char*)s);
+
+    char buf_cursor[256];
+    init_mouse_cursor((unsigned char*)buf_cursor, kColor008484);
+    int mouse_x = (boot_info->vram_x_len - 16) / 2;
+    int mouse_y = (boot_info->vram_y_len - 28 - 16) / 2;
+    draw_block(boot_info->vram, boot_info->vram_x_len, 16, 16, mouse_x, mouse_y, buf_cursor, 16);
+
     while (1) {
         io_hlt();
+    }
+}
+
+void draw_block(unsigned char* vram, int vram_x_len, int pic_size_x, int pic_size_y, int pic_pos_x, int pic_pos_y, char* buf, int buf_size_x)
+{
+    for (int y = 0; y < pic_size_y; y++) {
+        for (int x = 0; x < pic_size_x; x++) {
+            vram[(pic_pos_y + y) * vram_x_len + (pic_pos_x + x)] = buf[y * buf_size_x + x];
+        }
+    }
+}
+
+void init_mouse_cursor(unsigned char* mouse, char background_color)
+{
+    static unsigned char cursor[17][17] = {
+        "*...............",
+        "**..............",
+        "*0*.............",
+        "*00*............",
+        "*000*...........",
+        "*0000*..........",
+        "*00000*.........",
+        "*000000*........",
+        "*0000000*.......",
+        "*00000****......",
+        "*00*00*.........",
+        "*0*.*00*........",
+        "**...*0*........",
+        "*....*00*.......",
+        "......***.......",
+        "................",
+    };
+
+    for (int y = 0; y < 16; y++) {
+        for (int x = 0; x < 16; x++) {
+            switch (cursor[y][x]) {
+            case '*':
+                mouse[y * 16 + x] = kColor000000;
+                break;
+            case '0':
+                mouse[y * 16 + x] = kColorFFFFFF;
+                break;
+            case '.':
+                mouse[y * 16 + x] = background_color;
+                break;
+            }
+        }
     }
 }
 
