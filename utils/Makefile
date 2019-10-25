@@ -1,6 +1,6 @@
 BUILD_DIR		:= ../build/utils
 
-CXX_SRC			:= os_sprintf.cpp
+CXX_SRC			:= os_sprintf.cpp queue.cpp
 
 OBJ				:= $(addprefix $(BUILD_DIR)/, $(CXX_SRC:%.cpp=%.cpp.o))
 

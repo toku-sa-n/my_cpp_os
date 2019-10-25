@@ -1,4 +1,4 @@
-void init_gdt_idt();
+void InitGdtIdt();
 
 struct SegmentDescriptor {
     short limit_low, base_low;

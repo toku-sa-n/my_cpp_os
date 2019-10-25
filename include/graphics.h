@@ -1,13 +1,13 @@
 extern unsigned char fonts[4096];
 
-void set_palette(int start, int end, unsigned char* rgb);
-void init_palette();
-void draw_box(unsigned char* vram, int vram_x_len, unsigned char color, int x0, int y0, int x1, int y1);
-void os_putchar(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* font);
-void os_puts(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* s);
-void init_screen(unsigned char* vram, int vram_x_len, int vram_y_len);
-void init_mouse_cursor(unsigned char* mouse, char background_color);
-void draw_block(unsigned char* vram, int vram_x_len, int pic_size_x, int pic_size_y, int pic_pos_x, int pic_pos_y, char* buf, int buf_size_x);
+void SetPalette(int start, int end, unsigned char* rgb);
+void InitPalette();
+void DrawBox(unsigned char* vram, int vram_x_len, unsigned char color, int x0, int y0, int x1, int y1);
+void OSPutChar(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* font);
+void OSPuts(unsigned char* vram, int vram_x_len, int x, int y, char color, unsigned char* s);
+void InitScreen(unsigned char* vram, int vram_x_len, int vram_y_len);
+void InitMouseCursor(unsigned char* mouse, char background_color);
+void DrawBlock(unsigned char* vram, int vram_x_len, int pic_size_x, int pic_size_y, int pic_pos_x, int pic_pos_y, char* buf, int buf_size_x);
 
 const int kColor000000 = 0;
 const int kColorFF0000 = 1;

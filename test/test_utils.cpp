@@ -4,16 +4,16 @@
 
 const int kBufferSize = 1024;
 
-int os_vsprintf(char* str, const char* format, va_list ap);
+int OSVSPrintf(char* str, const char* format, va_list ap);
 
-bool test_os_vsprintf(int& num_test, int& num_success, const char* format, ...)
+bool TestOSVSPrintf(int& num_test, int& num_success, const char* format, ...)
 {
     num_test++;
     va_list ap;
 
     va_start(ap, format);
     char os_buf[kBufferSize] = { '\0' };
-    int os_count = os_vsprintf(os_buf, format, ap);
+    int os_count = OSVSPrintf(os_buf, format, ap);
     va_end(ap);
 
     va_start(ap, format);
@@ -50,7 +50,7 @@ int main()
 {
     int num_test = 0, num_success = 0;
 #define TEST_OS_VSPRINTF(format, ...) \
-    test_os_vsprintf(num_test, num_success, format, ##__VA_ARGS__)
+    TestOSVSPrintf(num_test, num_success, format, ##__VA_ARGS__)
     TEST_OS_VSPRINTF("This");
 
     TEST_OS_VSPRINTF("%d", 2);

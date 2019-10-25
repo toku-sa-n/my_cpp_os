@@ -1,1 +1,1 @@
-int os_sprintf(char* str, const char* format, ...);
+int OSSPrintf(char* str, const char* format, ...);

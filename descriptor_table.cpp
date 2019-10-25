@@ -2,7 +2,7 @@
 #include "asm_func.h"
 #include "os.h"
 
-void set_segment_descriptor(struct SegmentDescriptor* sd, unsigned int segment_size, int base, int access_right)
+void SetSegmentDescriptor(struct SegmentDescriptor* sd, unsigned int segment_size, int base, int access_right)
 {
     if (segment_size > 0xfffff) {
         // When G_bit = 1, the unit of segment_size is page, not byte.
@@ -22,7 +22,7 @@ void set_segment_descriptor(struct SegmentDescriptor* sd, unsigned int segment_s
     // clang-format on
 }
 
-void set_gate_descriptor(struct GateDescriptor* gd, int offset, int selector, int access_right)
+void SetGateDescriptor(struct GateDescriptor* gd, int offset, int selector, int access_right)
 {
     // clang-format off
     gd->offset_low   = offset & 0xffff;
@@ -33,7 +33,7 @@ void set_gate_descriptor(struct GateDescriptor* gd, int offset, int selector, in
     // clang-format on
 }
 
-void init_gdt_idt()
+void InitGdtIdt()
 {
     // 0x270000 ~ 0x27ffff: GDT
     struct SegmentDescriptor* gdt = (struct SegmentDescriptor*)kAddrGdt;
@@ -41,25 +41,26 @@ void init_gdt_idt()
     // Initialize all GDT segments
     // segment_size: 0, Base: 0, Access right: 0
     for (int i = 0; i <= kLimitGdt / 8; i++) {
-        set_segment_descriptor(gdt + i, 0, 0, 0);
+        SetSegmentDescriptor(gdt + i, 0, 0, 0);
     }
 
-    set_segment_descriptor(gdt + 1, 0xffffffff, 0x00000000, kAddrDataRw);
+    SetSegmentDescriptor(gdt + 1, 0xffffffff, 0x00000000, kAddrDataRw);
 
     // 0x002800: The start position of OS body file
-    set_segment_descriptor(gdt + 2, kLimitOSMain, kAddrOSMain, kAddrCodeEr);
-    load_gdtr(kLimitGdt, kAddrGdt);
+    SetSegmentDescriptor(gdt + 2, kLimitOSMain, kAddrOSMain, kAddrCodeEr);
+    LoadGdtr(kLimitGdt, kAddrGdt);
 
     struct GateDescriptor* idt = (struct GateDescriptor*)kAddrIdt;
     for (int i = 0; i <= kLimitIdt / 8; i++) {
-        set_gate_descriptor(idt + i, 0, 0, 0);
+        SetGateDescriptor(idt + i, 0, 0, 0);
     }
-    load_idtr(kLimitIdt, kAddrIdt);
+    LoadIdtr(kLimitIdt, kAddrIdt);
 
 #define SET_IDT(idx) \
-    set_gate_descriptor(idt + 0x##idx, (int)asm_interrupt_handler_##idx, 2 * 8, kAddrIntGate)
+    SetGateDescriptor(idt + 0x##idx, (int)AsmInterruptHandler##idx, 2 * 8, kAddrIntGate)
 
     SET_IDT(21);
     SET_IDT(27);
     SET_IDT(2c);
+#undef SET_IDT
 }

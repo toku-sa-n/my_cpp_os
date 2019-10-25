@@ -15,10 +15,10 @@ const int kPic1Icw4 = 0x00a1;
 
 const int kPortKeyData = 0x0060;
 
-void init_pic();
+void InitPic();
 
 extern "C" {
-void interrupt_handler_21(int* esp);
-void interrupt_handler_27(int* esp);
-void interrupt_handler_2c(int* esp);
+void InterruptHandler21(int* esp);
+void InterruptHandler27(int* esp);
+void InterruptHandler2c(int* esp);
 }

@@ -1,7 +1,7 @@
 #include <cstring>
 #include <stdarg.h>
 
-static int int_to_chars(char** str, int n, int base, bool zero_flag, int digits_num)
+static int IntToChars(char** str, int n, int base, bool zero_flag, int digits_num)
 {
     char numbers[] = "0123456789ABCDEF";
     char buf[1024] = { '\0' };
@@ -45,7 +45,7 @@ static int int_to_chars(char** str, int n, int base, bool zero_flag, int digits_
     return digits;
 }
 
-int os_vsprintf(char* str, const char* format, va_list ap)
+int OSVSPrintf(char* str, const char* format, va_list ap)
 {
     int count = 0;
 
@@ -70,9 +70,9 @@ int os_vsprintf(char* str, const char* format, va_list ap)
         }
 
         if (*format == 'd') {
-            count += int_to_chars(&str, va_arg(ap, int), 10, zero_flag, digits_num);
+            count += IntToChars(&str, va_arg(ap, int), 10, zero_flag, digits_num);
         } else if (*format == 'X') {
-            count += int_to_chars(&str, va_arg(ap, int), 16, zero_flag, digits_num);
+            count += IntToChars(&str, va_arg(ap, int), 16, zero_flag, digits_num);
         }
         format++;
     }
@@ -81,12 +81,12 @@ int os_vsprintf(char* str, const char* format, va_list ap)
     return count;
 }
 
-int os_sprintf(char* str, const char* format, ...)
+int OSSPrintf(char* str, const char* format, ...)
 {
     va_list ap;
     va_start(ap, format);
 
-    int count = os_vsprintf(str, format, ap);
+    int count = OSVSPrintf(str, format, ap);
 
     va_end(ap);
 

@@ -1,115 +1,115 @@
 [bits 32]
-    global io_hlt
-    global io_cli
-    global io_sti
-    global io_stihlt
+    global IoHlt
+    global IoCli
+    global IoSti
+    global IoStiHlt
 
-    global io_in8
-    global io_in16
-    global io_in32
+    global IoIn8
+    global IoIn16
+    global IoIn32
 
-    global io_out8
-    global io_out16
-    global io_out32
+    global IoOut8
+    global IoOut16
+    global IoOut32
 
-    global io_load_eflags
-    global io_store_eflags
+    global IoLoadEflags
+    global IoStoreEflags
 
-    global load_gdtr
-    global load_idtr
+    global LoadGdtr
+    global LoadIdtr
 
-    global asm_interrupt_handler_21
-    global asm_interrupt_handler_27
-    global asm_interrupt_handler_2c
+    global AsmInterruptHandler21
+    global AsmInterruptHandler27
+    global AsmInterruptHandler2c
 
-    extern interrupt_handler_21
-    extern interrupt_handler_27
-    extern interrupt_handler_2c
+    extern InterruptHandler21
+    extern InterruptHandler27
+    extern InterruptHandler2c
 
 [section .text]
 
-io_hlt:
+IoHlt:
     hlt
     ret
 
-io_cli:
+IoCli:
     cli
     ret
 
-io_sti:
+IoSti:
     sti
     ret
 
-io_stihlt:
+IoStiHlt:
     sti
     hlt
     ret
 
-; int io_in(8|16|32)(int port);
-io_in8:
+; int IoIn(8|16|32)(int port);
+IoIn8:
     mov edx,[esp+4]
     mov eax,0
     in al,dx
     ret
 
-io_in16:
+IoIn16:
     mov edx,[esp+4]
     mov eax,0
     in ax,dx
     ret
 
-io_in32:
+IoIn32:
     mov edx,[esp+4]
     in eax,dx
     ret
 
-; void io_out(8|16|32)(int port, int data);
-io_out8:
+; void IoOut(8|16|32)(int port, int data);
+IoOut8:
     mov edx,[esp+4]
     mov al,[esp+8]
     out dx,al
     ret
 
-io_out16:
+IoOut16:
     mov edx,[esp+4]
     mov eax,[esp+8]
     out dx,ax
     ret
 
-io_out32:
+IoOut32:
     mov edx,[esp+4]
     mov eax,[esp+8]
     out dx,eax
     ret
 
-; int io_load_eflags();
-io_load_eflags:
+; int IoLoadEflags();
+IoLoadEflags:
     pushfd
     pop eax
     ret
 
-; void io_store_eflags(int eflags);
-io_store_eflags:
+; void IoStoreEflags(int eflags);
+IoStoreEflags:
     mov eax,[esp+4]
     push eax
     popfd
     ret
 
-; void load_gdtr(int limit, int addr);
-load_gdtr:
+; void LoadGdtr(int limit, int addr);
+LoadGdtr:
     mov ax,[esp+4]
     mov [esp+6],ax
     lgdt [esp+6]
     ret
 
-; void load_idtr(int limit, int addr);
-load_idtr:
+; void LoadIdtr(int limit, int addr);
+LoadIdtr:
     mov ax,[esp+4]
     mov [esp+6],ax
     lidt [esp+6]
     ret
 
-asm_interrupt_handler_21:
+AsmInterruptHandler21:
     push es
     push ds
     pushad
@@ -118,14 +118,14 @@ asm_interrupt_handler_21:
     mov ax,ss
     mov ds,ax
     mov es,ax
-    call interrupt_handler_21
+    call InterruptHandler21
     pop eax
     popad
     pop ds
     pop es
     iretd
 
-asm_interrupt_handler_27:
+AsmInterruptHandler27:
     push es
     push ds
     pushad
@@ -134,14 +134,14 @@ asm_interrupt_handler_27:
     mov ax,ss
     mov ds,ax
     mov es,ax
-    call interrupt_handler_27
+    call InterruptHandler27
     pop eax
     popad
     pop ds
     pop es
     iretd
 
-asm_interrupt_handler_2c:
+AsmInterruptHandler2c:
     push es
     push ds
     pushad
@@ -150,7 +150,7 @@ asm_interrupt_handler_2c:
     mov ax,ss
     mov ds,ax
     mov es,ax
-    call interrupt_handler_2c
+    call InterruptHandler2c
     pop eax
     popad
     pop ds
