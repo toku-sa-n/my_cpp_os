@@ -5,7 +5,7 @@ CXX_SRC			:= os_sprintf.cpp queue.cpp
 OBJ				:= $(addprefix $(BUILD_DIR)/, $(CXX_SRC:%.cpp=%.cpp.o))
 
 CXX				:= gcc
-CXXFLAGS		:= -march=i486 -m32 -nostdlib -O0 -g -fno-pie -Wall
+CXXFLAGS		:= -march=i486 -m32 -nostdlib -O0 -g -fno-pie -Wall -I ../include
 
 all:$(OBJ)
 
