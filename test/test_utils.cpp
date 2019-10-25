@@ -58,6 +58,9 @@ int main()
 
     TEST_OS_VSPRINTF("%X", 1);
     TEST_OS_VSPRINTF("%X", 10);
+    TEST_OS_VSPRINTF("%X", 0xABC);
+    TEST_OS_VSPRINTF("This is %X pens.", 0xABC);
+    TEST_OS_VSPRINTF("%d%X", 334, 0x345);
 #undef TEST_OS_VSPRINTF
 
     std::cout << "The number of tests  : " << num_test << std::endl;
