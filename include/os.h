@@ -1,13 +1,3 @@
-extern "C" {
-void io_hlt();
-void io_cli();
-void io_out8(int port, int data);
-int io_load_eflags();
-void io_store_eflags(int eflags);
-
-void load_gdtr(int limit, int addr);
-void load_idtr(int limit, int addr);
-}
 void set_palette(int start, int end, unsigned char* rgb);
 void init_palette();
 void draw_box(unsigned char* vram, int vram_x_len, unsigned char color, int x0, int y0, int x1, int y1);

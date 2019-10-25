@@ -1,3 +1,4 @@
+#include "asm_func.h"
 #include "os.h"
 
 void set_segment_descriptor(struct SegmentDescriptor* sd, unsigned int limit, int base, int access_right)

@@ -1,3 +1,4 @@
+#include "asm_func.h"
 #include "os.h"
 
 void draw_block(unsigned char* vram, int vram_x_len, int pic_size_x, int pic_size_y, int pic_pos_x, int pic_pos_y, char* buf, int buf_size_x)

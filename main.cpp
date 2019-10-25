@@ -1,3 +1,4 @@
+#include "asm_func.h"
 #include "os.h"
 
 extern "C" void os_main()
