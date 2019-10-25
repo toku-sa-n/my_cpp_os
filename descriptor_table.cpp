@@ -1,3 +1,4 @@
+#include "descriptor_table.h"
 #include "asm_func.h"
 #include "os.h"
 

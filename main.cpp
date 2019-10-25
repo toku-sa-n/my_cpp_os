@@ -1,4 +1,5 @@
 #include "asm_func.h"
+#include "descriptor_table.h"
 #include "graphics.h"
 #include "os.h"
 
