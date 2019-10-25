@@ -122,7 +122,7 @@ asm_interrupt_handler_21:
     pop eax
     popad
     pop ds
-    pp es
+    pop es
     iretd
 
 asm_interrupt_handler_27:

@@ -13,6 +13,8 @@ const int kPic1Icw3 = 0x00a1;
 const int kPic1Icw4 = 0x00a1;
 // clang-format on
 
+const int kPortKeyData = 0x0060;
+
 void init_pic();
 
 extern "C" {

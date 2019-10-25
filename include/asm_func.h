@@ -3,6 +3,7 @@ void io_hlt();
 void io_cli();
 void io_sti();
 void io_out8(int port, int data);
+int io_in8(int port);
 int io_load_eflags();
 void io_store_eflags(int eflags);
 
