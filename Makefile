@@ -1,5 +1,3 @@
-# TODO: Use -MMD -MP options for C++ header file
-
 BUILD_DIR		:= build
 
 IPL_SRC			:= ipl.asm
@@ -24,7 +22,7 @@ ASMC			= nasm
 VIEWER			= qemu-system-i386
 CAT				= cat
 
-CXXFLAGS		= -march=i486 -m32 -nostdlib -O0 -g -fno-pie -Wall
+CXXFLAGS		= -march=i486 -m32 -nostdlib -O0 -g -fno-pie -Wall -I ./include
 
 .SUFFIXES:
 
@@ -48,7 +46,7 @@ $(BUILD_DIR)/%.asm.o:%.asm Makefile|$(BUILD_DIR)
 	$(ASMC) -o $@ $<
 
 $(BUILD_DIR)/%.cpp.o:%.cpp Makefile|$(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -c -o $@ $< -MMD -MP
 
 $(BUILD_DIR):
 	mkdir $@
