@@ -60,6 +60,7 @@ int main()
     TEST_OS_VSPRINTF("%2d", 3);
     TEST_OS_VSPRINTF("%5d", 3);
     TEST_OS_VSPRINTF("%3d%5d", 3, 5);
+    TEST_OS_VSPRINTF("%03d%05d", 3, 5);
 
     TEST_OS_VSPRINTF("%X", 1);
     TEST_OS_VSPRINTF("%X", 10);
