@@ -17,6 +17,8 @@ MAIN_FILE		:= $(BUILD_DIR)/os_main.o
 BODY_FILE		:= $(BUILD_DIR)/os_body.o
 IMG_FILE		:= $(BUILD_DIR)/os.img
 
+DEPS			:= $(addprefix $(BUILD_DIR)/, $(CXX_SRC:%.cpp=%.cpp.d))
+
 CXX				= gcc
 ASMC			= nasm
 VIEWER			= qemu-system-i386
@@ -56,3 +58,5 @@ run:$(IMG_FILE)
 
 clean:
 	rm -rf $(BUILD_DIR)
+
+-include $(DEPS)
