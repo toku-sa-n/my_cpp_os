@@ -1,3 +1,4 @@
+#include "graphics.h"
 #include "asm_func.h"
 #include "os.h"
 
