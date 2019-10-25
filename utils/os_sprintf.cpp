@@ -1,15 +1,28 @@
 #include <cstring>
 #include <stdarg.h>
 
-static int int_to_chars(char** str, int n)
+static int int_to_chars(char** str, int n, int base)
 {
+    char numbers[] = "0123456789ABCDEF";
     char buf[1024] = { '\0' };
 
     int ptr = 0;
     int digits = 0;
+
+    bool minus_flag = false;
+    if (n < 0) {
+        n = -n;
+        minus_flag = true;
+    }
+
     while (n > 0) {
-        buf[ptr++] = n % 10 + '0';
-        n /= 10;
+        buf[ptr++] = numbers[n % base];
+        n /= base;
+        digits++;
+    }
+
+    if (minus_flag) {
+        buf[ptr++] = '-';
         digits++;
     }
 
@@ -37,8 +50,13 @@ int os_vsprintf(char* str, const char* format, va_list ap)
             continue;
         }
 
-        format += 2;
-        count += int_to_chars(&str, va_arg(ap, int));
+        format++;
+        if (*format == 'd') {
+            count += int_to_chars(&str, va_arg(ap, int), 10);
+        } else if (*format == 'X') {
+            count += int_to_chars(&str, va_arg(ap, int), 16);
+        }
+        format++;
     }
 
     *str = '\0';
