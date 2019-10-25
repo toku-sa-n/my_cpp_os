@@ -1,7 +1,7 @@
 #include <cstring>
 #include <stdarg.h>
 
-static int int_to_chars(char** str, int n, int base, int digits_num)
+static int int_to_chars(char** str, int n, int base, bool zero_flag, int digits_num)
 {
     char numbers[] = "0123456789ABCDEF";
     char buf[1024] = { '\0' };
@@ -28,7 +28,7 @@ static int int_to_chars(char** str, int n, int base, int digits_num)
 
     int num_padding = digits_num - digits;
     for (int i = 0; i < num_padding; i++) {
-        buf[ptr++] = ' ';
+        buf[ptr++] = (zero_flag ? '0' : ' ');
         digits++;
     }
 
@@ -56,7 +56,12 @@ int os_vsprintf(char* str, const char* format, va_list ap)
             continue;
         }
 
-        format++;
+        format++; // format points '%' so move it by 1.
+
+        bool zero_flag = false;
+        if (*format == '0') {
+            zero_flag = true;
+        }
 
         int digits_num = 0;
         while (*format >= '0' && *format <= '9') {
@@ -65,9 +70,9 @@ int os_vsprintf(char* str, const char* format, va_list ap)
         }
 
         if (*format == 'd') {
-            count += int_to_chars(&str, va_arg(ap, int), 10, digits_num);
+            count += int_to_chars(&str, va_arg(ap, int), 10, zero_flag, digits_num);
         } else if (*format == 'X') {
-            count += int_to_chars(&str, va_arg(ap, int), 16, digits_num);
+            count += int_to_chars(&str, va_arg(ap, int), 16, zero_flag, digits_num);
         }
         format++;
     }
