@@ -44,6 +44,9 @@ $(BODY_FILE):$(BODY_COMPONENTS) $(LD_SRC) Makefile|$(BUILD_DIR)
 $(BUILD_DIR)/asm_func.asm.o:asm_func.asm Makefile|$(BUILD_DIR)
 	$(ASMC) -g -f elf $< -o $@
 
+$(BUILD_DIR)/nasm_func.asm.o:nasm_func.asm|$(BUILD_DIR)
+	$(ASMC) -o $@ -g -f elf $<
+
 $(BUILD_DIR)/%.asm.o:%.asm Makefile|$(BUILD_DIR)
 	$(ASMC) -o $@ $<
 

@@ -55,4 +55,11 @@ void init_gdt_idt()
         set_gate_descriptor(idt + i, 0, 0, 0);
     }
     load_idtr(kLimitIdt, kAddrIdt);
+
+#define SET_IDT(idx) \
+    set_gate_descriptor(idt + 0x##idx, (int)asm_interrupt_handler_##idx, 2 * 8, kAddrIntGate)
+
+    SET_IDT(21);
+    SET_IDT(27);
+    SET_IDT(2c);
 }

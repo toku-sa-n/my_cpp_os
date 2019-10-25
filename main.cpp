@@ -6,11 +6,11 @@
 
 extern "C" void os_main()
 {
+    init_gdt_idt();
     init_palette();
-
     init_pic();
 
-    init_gdt_idt();
+    io_sti();
 
     struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
 
@@ -29,6 +29,9 @@ extern "C" void os_main()
     int mouse_x = (boot_info->vram_x_len - 16) / 2;
     int mouse_y = (boot_info->vram_y_len - 28 - 16) / 2;
     draw_block(boot_info->vram, boot_info->vram_x_len, 16, 16, mouse_x, mouse_y, buf_cursor, 16);
+
+    io_out8(kPic0Imr, 0xf9); // Accept interrupt from Pic1 and keyboard
+    io_out8(kPic1Imr, 0xef); // Accept interrupt from mouse
 
     while (1) {
         io_hlt();

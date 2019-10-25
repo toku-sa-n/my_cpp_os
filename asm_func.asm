@@ -18,6 +18,14 @@
     global load_gdtr
     global load_idtr
 
+    global asm_interrupt_handler_21
+    global asm_interrupt_handler_27
+    global asm_interrupt_handler_2c
+
+    extern interrupt_handler_21
+    extern interrupt_handler_27
+    extern interrupt_handler_2c
+
 [section .text]
 
 io_hlt:
@@ -100,3 +108,51 @@ load_idtr:
     mov [esp+6],ax
     lidt [esp+6]
     ret
+
+asm_interrupt_handler_21:
+    push es
+    push ds
+    pushad
+    mov eax,esp
+    push eax
+    mov ax,ss
+    mov ds,ax
+    mov es,ax
+    call interrupt_handler_21
+    pop eax
+    popad
+    pop ds
+    pp es
+    iretd
+
+asm_interrupt_handler_27:
+    push es
+    push ds
+    pushad
+    mov eax,esp
+    push eax
+    mov ax,ss
+    mov ds,ax
+    mov es,ax
+    call interrupt_handler_27
+    pop eax
+    popad
+    pop ds
+    pop es
+    iretd
+
+asm_interrupt_handler_2c:
+    push es
+    push ds
+    pushad
+    mov eax,esp
+    push eax
+    mov ax,ss
+    mov ds,ax
+    mov es,ax
+    call interrupt_handler_2c
+    pop eax
+    popad
+    pop ds
+    pop es
+    iretd
