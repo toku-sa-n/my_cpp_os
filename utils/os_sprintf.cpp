@@ -26,7 +26,8 @@ static int int_to_chars(char** str, int n, int base, int digits_num)
         digits++;
     }
 
-    for (int i = 0; i < digits_num - digits; i++) {
+    int num_padding = digits_num - digits;
+    for (int i = 0; i < num_padding; i++) {
         buf[ptr++] = ' ';
         digits++;
     }
