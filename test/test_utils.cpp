@@ -55,6 +55,7 @@ int main()
     TEST_OS_VSPRINTF("%d", 2);
     TEST_OS_VSPRINTF("%d", 35);
     TEST_OS_VSPRINTF("%d", 123456789);
+    TEST_OS_VSPRINTF("%d", -3);
 
     TEST_OS_VSPRINTF("%X", 1);
     TEST_OS_VSPRINTF("%X", 10);
