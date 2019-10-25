@@ -3,6 +3,7 @@
 #include "graphics.h"
 #include "interrupt.h"
 #include "os.h"
+#include "utils.h"
 
 extern "C" void os_main()
 {

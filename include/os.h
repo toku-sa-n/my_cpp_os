@@ -12,8 +12,6 @@ const int kAddrCodeEr   = 0x409a;
 const int kAddrIntGate  = 0x008e;
 // clang-format on
 
-int os_sprintf(char* str, const char* format, ...);
-
 struct BootInfo {
     char cyls, leds, vmode, reserve;
     short vram_x_len, vram_y_len;
