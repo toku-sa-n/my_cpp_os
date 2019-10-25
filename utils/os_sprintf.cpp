@@ -1,7 +1,7 @@
 #include <cstring>
 #include <stdarg.h>
 
-static int int_to_chars(char** str, int n, int base)
+static int int_to_chars(char** str, int n, int base, int digits_num)
 {
     char numbers[] = "0123456789ABCDEF";
     char buf[1024] = { '\0' };
@@ -23,6 +23,11 @@ static int int_to_chars(char** str, int n, int base)
 
     if (minus_flag) {
         buf[ptr++] = '-';
+        digits++;
+    }
+
+    for (int i = 0; i < digits_num - digits; i++) {
+        buf[ptr++] = ' ';
         digits++;
     }
 
@@ -51,10 +56,17 @@ int os_vsprintf(char* str, const char* format, va_list ap)
         }
 
         format++;
+
+        int digits_num = 0;
+        while (*format >= '0' && *format <= '9') {
+            digits_num *= 10;
+            digits_num += *format++ - '0';
+        }
+
         if (*format == 'd') {
-            count += int_to_chars(&str, va_arg(ap, int), 10);
+            count += int_to_chars(&str, va_arg(ap, int), 10, digits_num);
         } else if (*format == 'X') {
-            count += int_to_chars(&str, va_arg(ap, int), 16);
+            count += int_to_chars(&str, va_arg(ap, int), 16, digits_num);
         }
         format++;
     }
