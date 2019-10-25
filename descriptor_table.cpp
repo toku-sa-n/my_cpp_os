@@ -36,23 +36,23 @@ void set_gate_descriptor(struct GateDescriptor* gd, int offset, int selector, in
 void init_gdt_idt()
 {
     // 0x270000 ~ 0x27ffff: GDT
-    struct SegmentDescriptor* gdt = (struct SegmentDescriptor*)0x00270000;
+    struct SegmentDescriptor* gdt = (struct SegmentDescriptor*)kAddrGdt;
 
     // Initialize all GDT segments
     // segment_size: 0, Base: 0, Access right: 0
-    for (int i = 0; i < 8192; i++) {
+    for (int i = 0; i <= kLimitGdt / 8; i++) {
         set_segment_descriptor(gdt + i, 0, 0, 0);
     }
 
-    set_segment_descriptor(gdt + 1, 0xffffffff, 0x00000000, 0x4092);
+    set_segment_descriptor(gdt + 1, 0xffffffff, 0x00000000, kAddrDataRw);
 
     // 0x002800: The start position of OS body file
-    set_segment_descriptor(gdt + 2, 0x0007ffff, 0x00280000, 0x409a);
-    load_gdtr(0xffff, 0x00270000);
+    set_segment_descriptor(gdt + 2, kLimitOSMain, kAddrOSMain, kAddrCodeEr);
+    load_gdtr(kLimitGdt, kAddrGdt);
 
-    struct GateDescriptor* idt = (struct GateDescriptor*)0x0026f800;
-    for (int i = 0; i < 256; i++) {
+    struct GateDescriptor* idt = (struct GateDescriptor*)kAddrIdt;
+    for (int i = 0; i <= kLimitIdt / 8; i++) {
         set_gate_descriptor(idt + i, 0, 0, 0);
     }
-    load_idtr(0x7ff, 0x0026f800);
+    load_idtr(kLimitIdt, kAddrIdt);
 }

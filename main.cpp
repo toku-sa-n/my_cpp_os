@@ -12,7 +12,7 @@ extern "C" void os_main()
 
     init_gdt_idt();
 
-    struct BootInfo* boot_info = (struct BootInfo*)0x0ff0;
+    struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
 
     init_screen(boot_info->vram, boot_info->vram_x_len, boot_info->vram_y_len);
 

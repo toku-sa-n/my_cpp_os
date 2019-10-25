@@ -1,5 +1,6 @@
 #include "interrupt.h"
 #include "asm_func.h"
+
 void init_pic()
 {
     io_out8(Pic0Imr, 0xff); // Master ignores all interrupt signals.
