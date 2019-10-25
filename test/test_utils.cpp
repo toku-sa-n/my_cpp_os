@@ -52,6 +52,7 @@ int main()
 #define TEST_OS_VSPRINTF(format, ...) \
     test_os_vsprintf(num_test, num_success, format, ##__VA_ARGS__)
     TEST_OS_VSPRINTF("This");
+
     TEST_OS_VSPRINTF("%d", 2);
     TEST_OS_VSPRINTF("%d", 35);
     TEST_OS_VSPRINTF("%d", 123456789);
@@ -64,6 +65,8 @@ int main()
     TEST_OS_VSPRINTF("%X", 10);
     TEST_OS_VSPRINTF("%X", 0xABC);
     TEST_OS_VSPRINTF("This is %X pens.", 0xABC);
+    TEST_OS_VSPRINTF("%3X%5X", 3, 5);
+
     TEST_OS_VSPRINTF("%d%X", 334, 0x345);
 #undef TEST_OS_VSPRINTF
 
