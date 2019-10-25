@@ -109,50 +109,24 @@ LoadIdtr:
     lidt [esp+6]
     ret
 
-AsmInterruptHandler21:
-    push es
-    push ds
-    pushad
-    mov eax,esp
-    push eax
-    mov ax,ss
-    mov ds,ax
-    mov es,ax
-    call InterruptHandler21
-    pop eax
-    popad
-    pop ds
-    pop es
-    iretd
+%macro ASM_INTERRUPT_HANDLER 1
+    AsmInterruptHandler%1:
+        push es
+        push ds
+        pushad
+        mov eax,esp
+        push eax
+        mov ax,ss
+        mov ds,ax
+        mov es,ax
+        call InterruptHandler%1
+        pop eax
+        popad
+        pop ds
+        pop es
+        iretd
+%endmacro
 
-AsmInterruptHandler27:
-    push es
-    push ds
-    pushad
-    mov eax,esp
-    push eax
-    mov ax,ss
-    mov ds,ax
-    mov es,ax
-    call InterruptHandler27
-    pop eax
-    popad
-    pop ds
-    pop es
-    iretd
-
-AsmInterruptHandler2c:
-    push es
-    push ds
-    pushad
-    mov eax,esp
-    push eax
-    mov ax,ss
-    mov ds,ax
-    mov es,ax
-    call InterruptHandler2c
-    pop eax
-    popad
-    pop ds
-    pop es
-    iretd
+ASM_INTERRUPT_HANDLER 21
+ASM_INTERRUPT_HANDLER 27
+ASM_INTERRUPT_HANDLER 2c
