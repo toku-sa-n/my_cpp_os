@@ -2,19 +2,22 @@
 #include "asm_func.h"
 #include "os.h"
 
-void set_segment_descriptor(struct SegmentDescriptor* sd, unsigned int limit, int base, int access_right)
+void set_segment_descriptor(struct SegmentDescriptor* sd, unsigned int segment_size, int base, int access_right)
 {
-    if (limit > 0xfffff) {
-        access_right |= 0x8000;
-        limit /= 0x1000;
+    if (segment_size > 0xfffff) {
+        // When G_bit = 1, the unit of segment_size is page, not byte.
+        // 1 page = 4 KB
+        // G:granularity
+        access_right |= 0x8000; // G_bit = 1
+        segment_size /= 0x1000;
     }
 
     // clang-format off
-    sd->limit_low    = limit & 0xffff;
+    sd->limit_low    = segment_size & 0xffff;
     sd->base_low     = base & 0xffff;
     sd->base_mid     = (base >> 16) & 0xff;
     sd->access_right = access_right & 0xff;
-    sd->limit_high   = ((limit >> 16) & 0x0f) | ((access_right >> 8) & 0xf0);
+    sd->limit_high   = ((segment_size >> 16) & 0x0f) | ((access_right >> 8) & 0xf0);
     sd->base_high    = (base >> 24) & 0xff;
     // clang-format on
 }
@@ -36,7 +39,7 @@ void init_gdt_idt()
     struct SegmentDescriptor* gdt = (struct SegmentDescriptor*)0x00270000;
 
     // Initialize all GDT segments
-    // Limit: 0, Base: 0, Access right: 0
+    // segment_size: 0, Base: 0, Access right: 0
     for (int i = 0; i < 8192; i++) {
         set_segment_descriptor(gdt + i, 0, 0, 0);
     }

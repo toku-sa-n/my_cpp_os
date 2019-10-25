@@ -1,11 +1,14 @@
 #include "asm_func.h"
 #include "descriptor_table.h"
 #include "graphics.h"
+#include "interrupt.h"
 #include "os.h"
 
 extern "C" void os_main()
 {
     init_palette();
+
+    init_pic();
 
     init_gdt_idt();
 
