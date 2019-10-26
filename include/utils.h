@@ -8,9 +8,10 @@ class Queue {
     int num_free_ = 32;
     int flags_ = 0;
 
+public:
     bool Enqueue(unsigned char data);
     int Dequeue();
-    int CountElements();
+    int GetNumElements();
 };
 
 template <unsigned QueueSize>
@@ -39,7 +40,7 @@ int Queue<QueueSize>::Dequeue()
     next_pos_read_ = (next_pos_read_ + 1) % QueueSize;
 
     num_free_++;
-    return next_pos_read_;
+    return data;
 }
 
 template <unsigned QueueSize>
