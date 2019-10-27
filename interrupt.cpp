@@ -57,13 +57,10 @@ void InterruptHandler21(int* esp)
 
 void InterruptHandler2c(int* esp)
 {
-    struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
-    DrawBox(boot_info->vram, boot_info->vram_x_len, kColor000000, 0, 0, 32 * 8 - 1, 15);
-    OSPuts(boot_info->vram, boot_info->vram_x_len, 0, 0, kColorFFFFFF, (unsigned char*)"INT 2C (IRQ-12) : PS/2 mouse");
-
-    while (1) {
-        IoHlt();
-    }
+    IoOut8(kPic1Ocw2, 0x64);
+    IoOut8(kPic0Ocw2, 0x62);
+    extern Queue<128> mouse_queue;
+    mouse_queue.Enqueue(IoIn8(kPortKeyData));
 }
 
 void InterruptHandler27(int* esp)
