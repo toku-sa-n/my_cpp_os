@@ -31,7 +31,7 @@ void MainLoop()
     }
 }
 
-extern "C" void OSMain()
+void InitOS()
 {
     InitGdtIdt();
     InitPic();
@@ -57,7 +57,11 @@ extern "C" void OSMain()
 
     InitKeyboard();
     EnableMouse();
+}
 
+extern "C" void OSMain()
+{
+    InitOS();
     while (1) {
         MainLoop();
     }
