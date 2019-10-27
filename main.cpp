@@ -5,6 +5,8 @@
 #include "os.h"
 #include "utils.h"
 
+Queue<32> key_queue;
+
 extern "C" void OSMain()
 {
     InitGdtIdt();
@@ -30,6 +32,15 @@ extern "C" void OSMain()
     IoOut8(kPic1Imr, 0xef); // Accept interrupt from mouse
 
     while (1) {
-        IoHlt();
+        IoCli();
+        if (!key_queue.GetNumElements()) {
+            IoStiHlt();
+        } else {
+            int key_data = key_queue.Dequeue();
+            IoSti();
+            OSSPrintf(s, "%02X", key_data);
+            DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 0, 16, 15, 31);
+            OSPuts(boot_info->vram, boot_info->vram_x_len, 0, 16, kColorFFFFFF, (unsigned char*)s);
+        }
     }
 }

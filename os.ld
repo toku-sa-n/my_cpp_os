@@ -15,7 +15,7 @@ SECTIONS
         LONG(0)
     }
 
-    .text : { *(.text) }
+    .text : { *(.text*) }
 
     .data 0x310000 : AT ( ADDR(.text) + SIZEOF(.text) ) {
         *(.data)

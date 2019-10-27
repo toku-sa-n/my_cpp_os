@@ -2,6 +2,7 @@ extern "C" {
 void IoHlt();
 void IoCli();
 void IoSti();
+void IoStiHlt();
 void IoOut8(int port, int data);
 int IoIn8(int port);
 int IoLoadEflags();

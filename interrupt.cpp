@@ -25,15 +25,9 @@ void InitPic()
 
 void InterruptHandler21(int* esp)
 {
-    struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
     IoOut8(kPic0Ocw2, 0x61);
-
-    unsigned char data = IoIn8(kPortKeyData);
-
-    unsigned char s[4];
-    OSSPrintf((char*)s, "%02X", data);
-    DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 0, 16, 15, 31);
-    OSPuts(boot_info->vram, boot_info->vram_x_len, 0, 16, kColorFFFFFF, s);
+    extern Queue<32> key_queue;
+    key_queue.Enqueue(IoIn8(kPortKeyData));
 }
 
 void InterruptHandler2c(int* esp)
