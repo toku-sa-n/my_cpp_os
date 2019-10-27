@@ -8,26 +8,51 @@
 Queue<32> key_queue;
 Queue<128> mouse_queue;
 
-void MainLoop()
+void MainLoop(int& mouse_phrase)
 {
+    static unsigned char mouse_buf[3];
     struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
     IoCli();
     if (key_queue.GetNumElements() + mouse_queue.GetNumElements() == 0) {
         IoStiHlt();
-    } else if (key_queue.GetNumElements()) {
+        return;
+    }
+    if (key_queue.GetNumElements()) {
         int key_data = key_queue.Dequeue();
         IoSti();
         char s[40];
         OSSPrintf(s, "%02X", key_data);
         DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 0, 16, 15, 31);
         OSPuts(boot_info->vram, boot_info->vram_x_len, 0, 16, kColorFFFFFF, (unsigned char*)s);
-    } else if (mouse_queue.GetNumElements()) {
+        return;
+    }
+    if (mouse_queue.GetNumElements()) {
         int mouse_data = mouse_queue.Dequeue();
         IoSti();
-        char s[40];
-        OSSPrintf(s, "%02X", mouse_data);
-        DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 32, 16, 47, 31);
-        OSPuts(boot_info->vram, boot_info->vram_x_len, 32, 16, kColorFFFFFF, (unsigned char*)s);
+
+        switch (mouse_phrase) {
+        case 0:
+            if (mouse_data == 0xfa) {
+                mouse_phrase = 1;
+            }
+            break;
+        case 1:
+            mouse_buf[0] = mouse_data;
+            mouse_phrase++;
+            break;
+        case 2:
+            mouse_buf[1] = mouse_data;
+            mouse_phrase++;
+            break;
+        case 3:
+            mouse_buf[2] = mouse_data;
+            mouse_phrase = 1;
+
+            char s[40];
+            OSSPrintf(s, "%02X %02X %02X", mouse_buf[0], mouse_buf[1], mouse_buf[2]);
+            DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 32, 16, 32 + 8 * 8 - 1, 31);
+            OSPuts(boot_info->vram, boot_info->vram_x_len, 32, 16, kColorFFFFFF, (unsigned char*)s);
+        }
     }
 }
 
@@ -62,7 +87,8 @@ void InitOS()
 extern "C" void OSMain()
 {
     InitOS();
+    int mouse_phrase = 0;
     while (1) {
-        MainLoop();
+        MainLoop(mouse_phrase);
     }
 }
