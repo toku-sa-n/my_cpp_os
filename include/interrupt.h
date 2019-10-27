@@ -11,9 +11,20 @@ const int kPic1Imr  = 0x00a1;
 const int kPic1Icw2 = 0x00a1;
 const int kPic1Icw3 = 0x00a1;
 const int kPic1Icw4 = 0x00a1;
+
+const int kPortKeyData           = 0x0060;
+const int kPortKeyStatus         = 0x0064;
+const int kPortKeyCmd            = 0x0064;
+const int kKeyStatusSendNotReady = 0x02;
+const int kKeyCmdWriteMode       = 0x60;
+const int kKBCMode               = 0x47;
+
+const int kKeyCmdSendToMouse     = 0xd4;
+const int kMouseCmdEnable        = 0xf4;
 // clang-format on
 
-const int kPortKeyData = 0x0060;
+void InitKeyboard();
+void EnableMouse();
 
 void InitPic();
 

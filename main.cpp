@@ -31,6 +31,9 @@ extern "C" void OSMain()
     IoOut8(kPic0Imr, 0xf9); // Accept interrupt from Pic1 and keyboard
     IoOut8(kPic1Imr, 0xef); // Accept interrupt from mouse
 
+    InitKeyboard();
+    EnableMouse();
+
     while (1) {
         IoCli();
         if (!key_queue.GetNumElements()) {

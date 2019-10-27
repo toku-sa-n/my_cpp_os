@@ -23,6 +23,31 @@ void InitPic()
     IoOut8(kPic1Imr, 0xff); // Slave ignores all interrupt signals.
 }
 
+void WaitKBCSendReady()
+{
+    while (1) {
+        if (!(IoIn8(kPortKeyStatus) & kKeyStatusSendNotReady)) {
+            break;
+        }
+    }
+}
+
+void InitKeyboard()
+{
+    WaitKBCSendReady();
+    IoOut8(kPortKeyCmd, kKeyCmdWriteMode);
+    WaitKBCSendReady();
+    IoOut8(kPortKeyData, kKBCMode);
+}
+
+void EnableMouse()
+{
+    WaitKBCSendReady();
+    IoOut8(kPortKeyCmd, kKeyCmdSendToMouse);
+    WaitKBCSendReady();
+    IoOut8(kPortKeyData, kMouseCmdEnable);
+}
+
 void InterruptHandler21(int* esp)
 {
     IoOut8(kPic0Ocw2, 0x61);
