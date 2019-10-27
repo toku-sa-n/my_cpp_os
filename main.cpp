@@ -8,6 +8,29 @@
 Queue<32> key_queue;
 Queue<128> mouse_queue;
 
+void MainLoop()
+{
+    struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
+    IoCli();
+    if (key_queue.GetNumElements() + mouse_queue.GetNumElements() == 0) {
+        IoStiHlt();
+    } else if (key_queue.GetNumElements()) {
+        int key_data = key_queue.Dequeue();
+        IoSti();
+        char s[40];
+        OSSPrintf(s, "%02X", key_data);
+        DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 0, 16, 15, 31);
+        OSPuts(boot_info->vram, boot_info->vram_x_len, 0, 16, kColorFFFFFF, (unsigned char*)s);
+    } else if (mouse_queue.GetNumElements()) {
+        int mouse_data = mouse_queue.Dequeue();
+        IoSti();
+        char s[40];
+        OSSPrintf(s, "%02X", mouse_data);
+        DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 32, 16, 47, 31);
+        OSPuts(boot_info->vram, boot_info->vram_x_len, 32, 16, kColorFFFFFF, (unsigned char*)s);
+    }
+}
+
 extern "C" void OSMain()
 {
     InitGdtIdt();
@@ -36,21 +59,6 @@ extern "C" void OSMain()
     EnableMouse();
 
     while (1) {
-        IoCli();
-        if (key_queue.GetNumElements() + mouse_queue.GetNumElements() == 0) {
-            IoStiHlt();
-        } else if (key_queue.GetNumElements()) {
-            int key_data = key_queue.Dequeue();
-            IoSti();
-            OSSPrintf(s, "%02X", key_data);
-            DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 0, 16, 15, 31);
-            OSPuts(boot_info->vram, boot_info->vram_x_len, 0, 16, kColorFFFFFF, (unsigned char*)s);
-        } else if (mouse_queue.GetNumElements()) {
-            int mouse_data = mouse_queue.Dequeue();
-            IoSti();
-            OSSPrintf(s, "%02X", mouse_data);
-            DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 32, 16, 47, 31);
-            OSPuts(boot_info->vram, boot_info->vram_x_len, 32, 16, kColorFFFFFF, (unsigned char*)s);
-        }
+        MainLoop();
     }
 }
