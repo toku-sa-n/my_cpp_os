@@ -69,10 +69,18 @@ int OSVSPrintf(char* str, const char* format, va_list ap)
             digits_num += *format++ - '0';
         }
 
-        if (*format == 'd') {
+        switch (*format) {
+        case 'd':
             count += IntToChars(&str, va_arg(ap, int), 10, zero_flag, digits_num);
-        } else if (*format == 'X') {
+            break;
+        case 'X':
             count += IntToChars(&str, va_arg(ap, int), 16, zero_flag, digits_num);
+            break;
+        case 'c':
+            // Do not va_arg(ap, char). This causes a runtime error.
+            count++;
+            *str++ = va_arg(ap, int);
+            break;
         }
         format++;
     }
