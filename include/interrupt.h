@@ -23,10 +23,16 @@ const int kKeyCmdSendToMouse     = 0xd4;
 const int kMouseCmdEnable        = 0xf4;
 // clang-format on
 
+struct MouseDecoder {
+    unsigned char buf[3], phase;
+};
+
 void InitKeyboard();
-void EnableMouse();
+void EnableMouse(struct MouseDecoder& mouse_decoder);
 
 void InitPic();
+
+bool decode_mouse(struct MouseDecoder& mouse_decoder, unsigned char data);
 
 extern "C" {
 void InterruptHandler21(int* esp);

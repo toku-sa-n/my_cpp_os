@@ -40,12 +40,40 @@ void InitKeyboard()
     IoOut8(kPortKeyData, kKBCMode);
 }
 
-void EnableMouse()
+void EnableMouse(struct MouseDecoder& mouse_decoder)
 {
     WaitKBCSendReady();
     IoOut8(kPortKeyCmd, kKeyCmdSendToMouse);
     WaitKBCSendReady();
     IoOut8(kPortKeyData, kMouseCmdEnable);
+
+    mouse_decoder.phase = 0;
+}
+
+// Return true if the buffer of mouse_decoder is full or somwthing goes wrong.
+// Otherwise return false.
+bool decode_mouse(struct MouseDecoder& mouse_decoder, unsigned char data)
+{
+    switch (mouse_decoder.phase) {
+    case 0:
+        if (data == 0xfa) {
+            mouse_decoder.phase = 1;
+        }
+        return false;
+    case 1:
+        mouse_decoder.buf[0] = data;
+        mouse_decoder.phase = 2;
+        return false;
+    case 2:
+        mouse_decoder.buf[1] = data;
+        mouse_decoder.phase = 3;
+        return false;
+    case 3:
+        mouse_decoder.buf[2] = data;
+        mouse_decoder.phase = 1;
+        return true;
+    }
+    return true;
 }
 
 void InterruptHandler21(int* esp)

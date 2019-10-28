@@ -8,9 +8,8 @@
 Queue<32> key_queue;
 Queue<128> mouse_queue;
 
-void MainLoop(int& mouse_phrase)
+void MainLoop(struct MouseDecoder& mouse_decoder)
 {
-    static unsigned char mouse_buf[3];
     struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
     IoCli();
     if (key_queue.GetNumElements() + mouse_queue.GetNumElements() == 0) {
@@ -30,33 +29,16 @@ void MainLoop(int& mouse_phrase)
         int mouse_data = mouse_queue.Dequeue();
         IoSti();
 
-        switch (mouse_phrase) {
-        case 0:
-            if (mouse_data == 0xfa) {
-                mouse_phrase = 1;
-            }
-            break;
-        case 1:
-            mouse_buf[0] = mouse_data;
-            mouse_phrase++;
-            break;
-        case 2:
-            mouse_buf[1] = mouse_data;
-            mouse_phrase++;
-            break;
-        case 3:
-            mouse_buf[2] = mouse_data;
-            mouse_phrase = 1;
-
+        if (decode_mouse(mouse_decoder, mouse_data)) {
             char s[40];
-            OSSPrintf(s, "%02X %02X %02X", mouse_buf[0], mouse_buf[1], mouse_buf[2]);
+            OSSPrintf(s, "%02X %02X %02X", mouse_decoder.buf[0], mouse_decoder.buf[1], mouse_decoder.buf[2]);
             DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 32, 16, 32 + 8 * 8 - 1, 31);
             OSPuts(boot_info->vram, boot_info->vram_x_len, 32, 16, kColorFFFFFF, (unsigned char*)s);
         }
     }
 }
 
-void InitOS()
+void InitOS(struct MouseDecoder& mouse_decoder)
 {
     InitGdtIdt();
     InitPic();
@@ -81,14 +63,15 @@ void InitOS()
     IoOut8(kPic1Imr, 0xef); // Accept interrupt from mouse
 
     InitKeyboard();
-    EnableMouse();
+    EnableMouse(mouse_decoder);
 }
 
 extern "C" void OSMain()
 {
-    InitOS();
-    int mouse_phrase = 0;
+    struct MouseDecoder mouse_decoder;
+    InitOS(mouse_decoder);
+    mouse_decoder.phase = 0;
     while (1) {
-        MainLoop(mouse_phrase);
+        MainLoop(mouse_decoder);
     }
 }
