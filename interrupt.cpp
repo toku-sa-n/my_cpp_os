@@ -4,6 +4,35 @@
 #include "os.h"
 #include "utils.h"
 
+void MouseDecoder::Init()
+{
+    phase = 0;
+}
+
+bool MouseDecoder::Decode(unsigned char data)
+{
+    switch (phase) {
+    case 0:
+        if (data == 0xfa) {
+            phase = 1;
+        }
+        return false;
+    case 1:
+        buf[0] = data;
+        phase = 2;
+        return false;
+    case 2:
+        buf[1] = data;
+        phase = 3;
+        return false;
+    case 3:
+        buf[2] = data;
+        phase = 1;
+        return true;
+    }
+    return true;
+}
+
 void InitPic()
 {
     IoOut8(kPic0Imr, 0xff); // Master ignores all interrupt signals.
@@ -40,40 +69,14 @@ void InitKeyboard()
     IoOut8(kPortKeyData, kKBCMode);
 }
 
-void EnableMouse(struct MouseDecoder& mouse_decoder)
+void EnableMouse(MouseDecoder& mouse_decoder)
 {
     WaitKBCSendReady();
     IoOut8(kPortKeyCmd, kKeyCmdSendToMouse);
     WaitKBCSendReady();
     IoOut8(kPortKeyData, kMouseCmdEnable);
 
-    mouse_decoder.phase = 0;
-}
-
-// Return true if the buffer of mouse_decoder is full or somwthing goes wrong.
-// Otherwise return false.
-bool decode_mouse(struct MouseDecoder& mouse_decoder, unsigned char data)
-{
-    switch (mouse_decoder.phase) {
-    case 0:
-        if (data == 0xfa) {
-            mouse_decoder.phase = 1;
-        }
-        return false;
-    case 1:
-        mouse_decoder.buf[0] = data;
-        mouse_decoder.phase = 2;
-        return false;
-    case 2:
-        mouse_decoder.buf[1] = data;
-        mouse_decoder.phase = 3;
-        return false;
-    case 3:
-        mouse_decoder.buf[2] = data;
-        mouse_decoder.phase = 1;
-        return true;
-    }
-    return true;
+    mouse_decoder.Init();
 }
 
 void InterruptHandler21(int* esp)

@@ -8,7 +8,7 @@
 Queue<32> key_queue;
 Queue<128> mouse_queue;
 
-void MainLoop(struct MouseDecoder& mouse_decoder)
+void MainLoop(MouseDecoder& mouse_decoder)
 {
     struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
     IoCli();
@@ -29,7 +29,7 @@ void MainLoop(struct MouseDecoder& mouse_decoder)
         int mouse_data = mouse_queue.Dequeue();
         IoSti();
 
-        if (decode_mouse(mouse_decoder, mouse_data)) {
+        if (mouse_decoder.Decode(mouse_data)) {
             char s[40];
             OSSPrintf(s, "%02X %02X %02X", mouse_decoder.buf[0], mouse_decoder.buf[1], mouse_decoder.buf[2]);
             DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 32, 16, 32 + 8 * 8 - 1, 31);
@@ -38,7 +38,7 @@ void MainLoop(struct MouseDecoder& mouse_decoder)
     }
 }
 
-void InitOS(struct MouseDecoder& mouse_decoder)
+void InitOS(MouseDecoder& mouse_decoder)
 {
     InitGdtIdt();
     InitPic();
@@ -68,9 +68,8 @@ void InitOS(struct MouseDecoder& mouse_decoder)
 
 extern "C" void OSMain()
 {
-    struct MouseDecoder mouse_decoder;
+    MouseDecoder mouse_decoder;
     InitOS(mouse_decoder);
-    mouse_decoder.phase = 0;
     while (1) {
         MainLoop(mouse_decoder);
     }
