@@ -33,6 +33,16 @@ bool MouseDecoder::Decode(unsigned char data)
     return true;
 }
 
+void MouseDecoder::PutInfo(int x, int y)
+{
+    struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
+
+    char s[40];
+    OSSPrintf(s, "%02X %02X %02X", buf[0], buf[1], buf[2]);
+    DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, x, y, x + 8 * 8 - 1, y + 15);
+    OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
+}
+
 void InitPic()
 {
     IoOut8(kPic0Imr, 0xff); // Master ignores all interrupt signals.

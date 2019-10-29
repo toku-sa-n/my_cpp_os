@@ -25,11 +25,12 @@ const int kMouseCmdEnable        = 0xf4;
 
 class MouseDecoder {
     unsigned char phase;
+    unsigned char buf[3];
 
 public:
-    unsigned char buf[3];
     void Init();
     bool Decode(unsigned char data);
+    void PutInfo(int x, int y);
 };
 
 void InitKeyboard();

@@ -30,10 +30,7 @@ void MainLoop(MouseDecoder& mouse_decoder)
         IoSti();
 
         if (mouse_decoder.Decode(mouse_data)) {
-            char s[40];
-            OSSPrintf(s, "%02X %02X %02X", mouse_decoder.buf[0], mouse_decoder.buf[1], mouse_decoder.buf[2]);
-            DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 32, 16, 32 + 8 * 8 - 1, 31);
-            OSPuts(boot_info->vram, boot_info->vram_x_len, 32, 16, kColorFFFFFF, (unsigned char*)s);
+            mouse_decoder.PutInfo(16, 32);
         }
     }
 }
