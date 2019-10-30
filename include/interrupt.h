@@ -51,6 +51,8 @@ class Mouse {
     unsigned char buf_[3];
     unsigned char phase_;
     int x_, y_;
+    int moving_distance_x_, moving_distance_y_;
+    int button_;
     unsigned char buf_color_[y_len_][x_len_];
     Queue<128> queue_;
 
