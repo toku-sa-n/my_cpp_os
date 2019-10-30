@@ -58,14 +58,16 @@ class Mouse {
 
 public:
     bool Decode(unsigned char data);
-    void PutInfo(int x, int y);
-    void PutPosition(int x, int y);
-    void Enable();
     bool IsQueueEmpty();
     void Enqueue(unsigned char data);
     unsigned char Dequeue();
-    void SetCoord(int x, int y);
+
+    void PutInfo(int x, int y);
+    void PutPosition(int x, int y);
     void Draw();
+
+    void Enable();
+    void SetCoord(int x, int y);
 };
 
 void InitKeyboard();
