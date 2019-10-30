@@ -4,6 +4,15 @@
 #include "os.h"
 #include "utils.h"
 
+void WaitKBCSendReady()
+{
+    while (1) {
+        if (!(IoIn8(kPortKeyStatus) & kKeyStatusSendNotReady)) {
+            break;
+        }
+    }
+}
+
 void MouseDecoder::Init()
 {
     phase = 0;
@@ -43,6 +52,16 @@ void MouseDecoder::PutInfo(int x, int y)
     OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
 }
 
+void MouseDecoder::Enable()
+{
+    WaitKBCSendReady();
+    IoOut8(kPortKeyCmd, kKeyCmdSendToMouse);
+    WaitKBCSendReady();
+    IoOut8(kPortKeyData, kMouseCmdEnable);
+
+    Init();
+}
+
 void InitPic()
 {
     IoOut8(kPic0Imr, 0xff); // Master ignores all interrupt signals.
@@ -62,31 +81,12 @@ void InitPic()
     IoOut8(kPic1Imr, 0xff); // Slave ignores all interrupt signals.
 }
 
-void WaitKBCSendReady()
-{
-    while (1) {
-        if (!(IoIn8(kPortKeyStatus) & kKeyStatusSendNotReady)) {
-            break;
-        }
-    }
-}
-
 void InitKeyboard()
 {
     WaitKBCSendReady();
     IoOut8(kPortKeyCmd, kKeyCmdWriteMode);
     WaitKBCSendReady();
     IoOut8(kPortKeyData, kKBCMode);
-}
-
-void EnableMouse(MouseDecoder& mouse_decoder)
-{
-    WaitKBCSendReady();
-    IoOut8(kPortKeyCmd, kKeyCmdSendToMouse);
-    WaitKBCSendReady();
-    IoOut8(kPortKeyData, kMouseCmdEnable);
-
-    mouse_decoder.Init();
 }
 
 void InterruptHandler21(int* esp)

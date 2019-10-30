@@ -31,11 +31,10 @@ public:
     void Init();
     bool Decode(unsigned char data);
     void PutInfo(int x, int y);
+    void Enable();
 };
 
 void InitKeyboard();
-void EnableMouse(struct MouseDecoder& mouse_decoder);
-
 void InitPic();
 
 bool decode_mouse(struct MouseDecoder& mouse_decoder, unsigned char data);

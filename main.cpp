@@ -60,7 +60,7 @@ void InitOS(MouseDecoder& mouse_decoder)
     IoOut8(kPic1Imr, 0xef); // Accept interrupt from mouse
 
     InitKeyboard();
-    EnableMouse(mouse_decoder);
+    mouse_decoder.Enable();
 }
 
 extern "C" void OSMain()
