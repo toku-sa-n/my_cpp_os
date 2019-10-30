@@ -8,7 +8,7 @@
 Queue<32> key_queue;
 Queue<128> mouse_queue;
 
-void MainLoop(MouseDecoder& mouse_decoder)
+void MainLoop(Mouse& mouse)
 {
     const struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
     IoCli();
@@ -29,13 +29,13 @@ void MainLoop(MouseDecoder& mouse_decoder)
         int mouse_data = mouse_queue.Dequeue();
         IoSti();
 
-        if (mouse_decoder.Decode(mouse_data)) {
-            mouse_decoder.PutInfo(16, 32);
+        if (mouse.Decode(mouse_data)) {
+            mouse.PutInfo(16, 32);
         }
     }
 }
 
-void InitOS(MouseDecoder& mouse_decoder)
+void InitOS(Mouse& mouse)
 {
     InitGdtIdt();
     InitPic();
@@ -60,15 +60,15 @@ void InitOS(MouseDecoder& mouse_decoder)
     IoOut8(kPic1Imr, 0xef); // Accept interrupt from mouse
 
     InitKeyboard();
-    mouse_decoder.Enable();
+    mouse.Enable();
 }
 
 extern "C" void OSMain()
 {
-    MouseDecoder mouse_decoder;
-    InitOS(mouse_decoder);
+    Mouse mouse;
+    InitOS(mouse);
 
     while (1) {
-        MainLoop(mouse_decoder);
+        MainLoop(mouse);
     }
 }

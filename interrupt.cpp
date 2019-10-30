@@ -13,7 +13,7 @@ void WaitKBCSendReady()
     }
 }
 
-bool MouseDecoder::Decode(unsigned char data)
+bool Mouse::Decode(unsigned char data)
 {
     switch (phase) {
     case 0:
@@ -37,7 +37,7 @@ bool MouseDecoder::Decode(unsigned char data)
     return true;
 }
 
-void MouseDecoder::PutInfo(int x, int y)
+void Mouse::PutInfo(int x, int y)
 {
     struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
 
@@ -47,7 +47,7 @@ void MouseDecoder::PutInfo(int x, int y)
     OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
 }
 
-void MouseDecoder::Enable()
+void Mouse::Enable()
 {
     WaitKBCSendReady();
     IoOut8(kPortKeyCmd, kKeyCmdSendToMouse);
