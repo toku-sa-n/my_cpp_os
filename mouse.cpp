@@ -58,21 +58,6 @@ bool Mouse::Decode(unsigned char data)
     return true;
 }
 
-bool Mouse::IsQueueEmpty()
-{
-    return queue_.GetNumElements() == 0;
-}
-
-void Mouse::Enqueue(unsigned char data)
-{
-    queue_.Enqueue(data);
-}
-
-unsigned char Mouse::Dequeue()
-{
-    return queue_.Dequeue();
-}
-
 void Mouse::PutInfo(int x, int y)
 {
     struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;

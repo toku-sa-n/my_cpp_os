@@ -51,8 +51,8 @@ void InterruptHandler2c(int* esp)
 {
     IoOut8(kPic1Ocw2, 0x64);
     IoOut8(kPic0Ocw2, 0x62);
-    extern Mouse mouse;
-    mouse.Enqueue(IoIn8(kPortKeyData));
+    extern Queue<128> mouse_queue;
+    mouse_queue.Enqueue(IoIn8(kPortKeyData));
 }
 
 void InterruptHandler27(int* esp)

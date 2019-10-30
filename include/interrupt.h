@@ -27,6 +27,10 @@ const int kMouseCmdEnable        = 0xf4;
 
 #include "utils.h"
 
+// This class handles about mouse cursor itself
+// and doesn't contain queue for keeping data from mouse interruption.
+// But for keeping the most recent three byte, buf_[3] can be used.
+// This array is used to know where mouse moves to and which buttons are pressed.
 class Mouse {
     static const int x_len_ = 16, y_len_ = 16;
     inline static constexpr unsigned char buf_graphic_[y_len_ + 1][x_len_ + 1] {
@@ -59,15 +63,11 @@ class Mouse {
     int moving_distance_x_, moving_distance_y_;
     int button_;
     unsigned char buf_color_[y_len_][x_len_];
-    Queue<128> queue_;
 
     void SetColor(unsigned char background_color);
 
 public:
     bool Decode(unsigned char data);
-    bool IsQueueEmpty();
-    void Enqueue(unsigned char data);
-    unsigned char Dequeue();
 
     void PutInfo(int x, int y);
     void PutPosition(int x, int y);

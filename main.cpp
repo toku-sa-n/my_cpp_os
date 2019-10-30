@@ -6,13 +6,14 @@
 #include "utils.h"
 
 Queue<32> key_queue;
+Queue<128> mouse_queue;
 
 Mouse mouse;
 void MainLoop()
 {
     const struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
     IoCli();
-    if (key_queue.GetNumElements() == 0 && mouse.IsQueueEmpty()) {
+    if (key_queue.GetNumElements() + mouse_queue.GetNumElements() == 0) {
         IoStiHlt();
         return;
     }
@@ -25,8 +26,8 @@ void MainLoop()
         OSPuts(boot_info->vram, boot_info->vram_x_len, 0, 16, kColorFFFFFF, (unsigned char*)s);
         return;
     }
-    if (!mouse.IsQueueEmpty()) {
-        int mouse_data = mouse.Dequeue();
+    if (mouse_queue.GetNumElements()) {
+        int mouse_data = mouse_queue.Dequeue();
         IoSti();
 
         if (mouse.Decode(mouse_data)) {
