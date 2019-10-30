@@ -1,3 +1,5 @@
+#pragma once
+
 template <unsigned QueueSize>
 class Queue {
     const int kFlagsOverRun_ = 1;

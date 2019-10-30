@@ -1,3 +1,5 @@
+#pragma once
+
 // clang-format off
 const int kAddrBootInfo = 0x00000ff0;
 

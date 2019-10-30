@@ -1,3 +1,5 @@
+#pragma once
+
 // clang-format off
 const int kPic0Icw1 = 0x0020;
 const int kPic0Ocw2 = 0x0020;

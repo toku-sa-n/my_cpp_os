@@ -1,3 +1,5 @@
+#pragma once
+
 extern unsigned char fonts[4096];
 
 void SetPalette(int start, int end, unsigned char* rgb);
