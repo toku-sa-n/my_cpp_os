@@ -70,6 +70,7 @@ public:
     void SetCoord(int x, int y);
 };
 
+void WaitKBCSendReady();
 void InitKeyboard();
 void InitPic();
 
