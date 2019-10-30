@@ -83,14 +83,14 @@ void Mouse::PutInfo(int x, int y)
         (button_ & 0x04 ? 'C' : 'c'),
         (button_ & 0x02 ? 'R' : 'r'),
         moving_distance_x_, moving_distance_y_);
-    DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, x, y, x + 15 * 8 - 1, y + 15);
+    DrawBox(boot_info->vram, boot_info->vram_x_len, kColorBackGround, x, y, x + 15 * 8 - 1, y + 15);
     OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
 }
 
 void Mouse::PutPosition(int x, int y)
 {
     const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
-    DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, x, y, x + 79, y + 15);
+    DrawBox(boot_info->vram, boot_info->vram_x_len, kColorBackGround, x, y, x + 79, y + 15);
     char s[40];
     OSSPrintf(s, "(%d, %d)", x_, y_);
     OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
@@ -99,7 +99,7 @@ void Mouse::PutPosition(int x, int y)
 void Mouse::Draw()
 {
     const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
-    DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, x_, y_, x_ + x_len_ - 1, y_ + y_len_ - 1);
+    DrawBox(boot_info->vram, boot_info->vram_x_len, kColorBackGround, x_, y_, x_ + x_len_ - 1, y_ + y_len_ - 1);
     DrawBlock(boot_info->vram, boot_info->vram_x_len, x_len_, y_len_, next_x_, next_y_, (char*)buf_color_, x_len_);
 
     x_ = next_x_;
@@ -114,7 +114,7 @@ void Mouse::Enable()
     IoOut8(kPortKeyData, kMouseCmdEnable);
 
     phase_ = 0;
-    SetColor(kColor008484);
+    SetColor(kColorBackGround);
     Draw();
 }
 

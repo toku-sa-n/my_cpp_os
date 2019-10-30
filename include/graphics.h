@@ -27,3 +27,5 @@ const int kColor000084 = 12;
 const int kColor840084 = 13;
 const int kColor008484 = 14;
 const int kColor848484 = 15;
+
+const int kColorBackGround = kColor008484;

@@ -21,7 +21,7 @@ void MainLoop()
         IoSti();
         char s[40];
         OSSPrintf(s, "%02X", key_data);
-        DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, 0, 16, 15, 31);
+        DrawBox(boot_info->vram, boot_info->vram_x_len, kColorBackGround, 0, 16, 15, 31);
         OSPuts(boot_info->vram, boot_info->vram_x_len, 0, 16, kColorFFFFFF, (unsigned char*)s);
         return;
     }
