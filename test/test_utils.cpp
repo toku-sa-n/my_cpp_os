@@ -53,6 +53,7 @@ int main()
     TestOSVSPrintf(num_test, num_success, format, ##__VA_ARGS__)
     TEST_OS_VSPRINTF("This");
 
+    TEST_OS_VSPRINTF("%d", 0);
     TEST_OS_VSPRINTF("%d", 2);
     TEST_OS_VSPRINTF("%d", 35);
     TEST_OS_VSPRINTF("%d", 123456789);
