@@ -50,7 +50,8 @@ class Mouse {
 
     unsigned char buf_[3];
     unsigned char phase_;
-    int x_, y_;
+    int x_ = 100, y_ = 100;
+    int next_x_, next_y_; // Destination to move
     int moving_distance_x_, moving_distance_y_;
     int button_;
     unsigned char buf_color_[y_len_][x_len_];

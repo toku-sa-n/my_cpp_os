@@ -43,6 +43,16 @@ bool Mouse::Decode(unsigned char data)
         // By reversing the sign, the y direction of mouse will be the same with the screen.
         moving_distance_y_ = -moving_distance_y_;
 
+        next_x_ = x_ + moving_distance_x_;
+        next_y_ = y_ + moving_distance_y_;
+
+#define BETWEEN(x, from, to) \
+    x = (x < from ? from : (x > to ? to : x))
+        const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
+        BETWEEN(next_x_, 0, boot_info->vram_x_len - x_len_);
+        BETWEEN(next_y_, 0, boot_info->vram_y_len - y_len_);
+#undef BETWEEN
+
         return true;
     }
     return true;
@@ -88,7 +98,11 @@ void Mouse::PutPosition(int x, int y)
 void Mouse::Draw()
 {
     const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
-    DrawBlock(boot_info->vram, boot_info->vram_x_len, x_len_, y_len_, x_, y_, (char*)buf_color_, x_len_);
+    DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, x_, y_, x_ + x_len_ - 1, y_ + y_len_ - 1);
+    DrawBlock(boot_info->vram, boot_info->vram_x_len, x_len_, y_len_, next_x_, next_y_, (char*)buf_color_, x_len_);
+
+    x_ = next_x_;
+    y_ = next_y_;
 }
 
 void Mouse::Enable()
@@ -105,8 +119,8 @@ void Mouse::Enable()
 
 void Mouse::SetCoord(int x, int y)
 {
-    x_ = x;
-    y_ = y;
+    next_x_ = x;
+    next_y_ = y;
 }
 
 void Mouse::SetColor(unsigned char background_color)

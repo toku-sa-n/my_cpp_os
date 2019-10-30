@@ -31,6 +31,7 @@ void MainLoop()
 
         if (mouse.Decode(mouse_data)) {
             mouse.PutInfo(16, 32);
+            mouse.Draw();
         }
     }
 }
