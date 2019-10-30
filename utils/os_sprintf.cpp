@@ -15,10 +15,15 @@ static int IntToChars(char** str, int n, int base, bool zero_flag, int digits_nu
         minus_flag = true;
     }
 
-    while (n > 0) {
-        buf[ptr++] = numbers[n % base];
-        n /= base;
+    if (n == 0) {
+        buf[ptr++] = '0';
         digits++;
+    } else {
+        while (n > 0) {
+            buf[ptr++] = numbers[n % base];
+            n /= base;
+            digits++;
+        }
     }
 
     if (minus_flag) {
