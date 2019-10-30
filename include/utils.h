@@ -1,6 +1,5 @@
 template <unsigned QueueSize>
 class Queue {
-    // TODO: Make the size of buf_ changeable.
     const int kFlagsOverRun_ = 1;
 
     unsigned char buf_[QueueSize];
