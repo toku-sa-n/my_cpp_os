@@ -28,9 +28,9 @@ const int kMouseCmdEnable        = 0xf4;
 #include "utils.h"
 
 class Mouse {
-    unsigned char buf[3];
-    unsigned char phase;
-    Queue<128> queue;
+    unsigned char buf_[3];
+    unsigned char phase_;
+    Queue<128> queue_;
 
 public:
     bool Decode(unsigned char data);

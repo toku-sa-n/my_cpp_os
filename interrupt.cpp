@@ -15,23 +15,23 @@ void WaitKBCSendReady()
 
 bool Mouse::Decode(unsigned char data)
 {
-    switch (phase) {
+    switch (phase_) {
     case 0:
         if (data == 0xfa) {
-            phase = 1;
+            phase_ = 1;
         }
         return false;
     case 1:
-        buf[0] = data;
-        phase = 2;
+        buf_[0] = data;
+        phase_ = 2;
         return false;
     case 2:
-        buf[1] = data;
-        phase = 3;
+        buf_[1] = data;
+        phase_ = 3;
         return false;
     case 3:
-        buf[2] = data;
-        phase = 1;
+        buf_[2] = data;
+        phase_ = 1;
         return true;
     }
     return true;
@@ -42,7 +42,7 @@ void Mouse::PutInfo(int x, int y)
     struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
 
     char s[40];
-    OSSPrintf(s, "%02X %02X %02X", buf[0], buf[1], buf[2]);
+    OSSPrintf(s, "%02X %02X %02X", buf_[0], buf_[1], buf_[2]);
     DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, x, y, x + 8 * 8 - 1, y + 15);
     OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
 }
@@ -54,22 +54,22 @@ void Mouse::Enable()
     WaitKBCSendReady();
     IoOut8(kPortKeyData, kMouseCmdEnable);
 
-    phase = 0;
+    phase_ = 0;
 }
 
 bool Mouse::IsQueueEmpty()
 {
-    return queue.GetNumElements() == 0;
+    return queue_.GetNumElements() == 0;
 }
 
 unsigned char Mouse::Dequeue()
 {
-    return queue.Dequeue();
+    return queue_.Dequeue();
 }
 
 void Mouse::Enqueue(unsigned char data)
 {
-    queue.Enqueue(data);
+    queue_.Enqueue(data);
 }
 
 void InitPic()
