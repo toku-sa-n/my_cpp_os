@@ -90,6 +90,7 @@ void Mouse::PutInfo(int x, int y)
 void Mouse::PutPosition(int x, int y)
 {
     const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
+    DrawBox(boot_info->vram, boot_info->vram_x_len, kColor008484, x, y, x + 79, y + 15);
     char s[40];
     OSSPrintf(s, "(%d, %d)", x_, y_);
     OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
