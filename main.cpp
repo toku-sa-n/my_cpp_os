@@ -47,14 +47,8 @@ void InitOS()
 
     InitScreen(boot_info->vram, boot_info->vram_x_len, boot_info->vram_y_len);
 
-    char buf_cursor[256];
-    InitMouseCursor((unsigned char*)buf_cursor, kColor008484);
-    int mouse_x = (boot_info->vram_x_len - 16) / 2;
-    int mouse_y = (boot_info->vram_y_len - 28 - 16) / 2;
-    DrawBlock(boot_info->vram, boot_info->vram_x_len, 16, 16, mouse_x, mouse_y, buf_cursor, 16);
-    char s[40];
-    OSSPrintf(s, "(%d, %d)", mouse_x, mouse_y);
-    OSPuts(boot_info->vram, boot_info->vram_x_len, 0, 0, kColorFFFFFF, (unsigned char*)s);
+    mouse.SetCoord((boot_info->vram_x_len - 16) / 2, (boot_info->vram_y_len - 28 - 16) / 2);
+    mouse.PutPosition(0, 0);
 
     IoOut8(kPic0Imr, 0xf9); // Accept interrupt from Pic1 and keyboard
     IoOut8(kPic1Imr, 0xef); // Accept interrupt from mouse

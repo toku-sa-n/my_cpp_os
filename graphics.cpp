@@ -11,44 +11,6 @@ void DrawBlock(unsigned char* vram, int vram_x_len, int pic_size_x, int pic_size
     }
 }
 
-void InitMouseCursor(unsigned char* mouse, char background_color)
-{
-    static unsigned char cursor[17][17] = {
-        "*...............",
-        "**..............",
-        "*0*.............",
-        "*00*............",
-        "*000*...........",
-        "*0000*..........",
-        "*00000*.........",
-        "*000000*........",
-        "*0000000*.......",
-        "*00000****......",
-        "*00*00*.........",
-        "*0*.*00*........",
-        "**...*0*........",
-        "*....*00*.......",
-        "......***.......",
-        "................",
-    };
-
-    for (int y = 0; y < 16; y++) {
-        for (int x = 0; x < 16; x++) {
-            switch (cursor[y][x]) {
-            case '*':
-                mouse[y * 16 + x] = kColor000000;
-                break;
-            case '0':
-                mouse[y * 16 + x] = kColorFFFFFF;
-                break;
-            case '.':
-                mouse[y * 16 + x] = background_color;
-                break;
-            }
-        }
-    }
-}
-
 void InitScreen(unsigned char* vram, int vram_x_len, int vram_y_len)
 {
     // clang-format off

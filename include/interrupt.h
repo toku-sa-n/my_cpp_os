@@ -28,17 +28,44 @@ const int kMouseCmdEnable        = 0xf4;
 #include "utils.h"
 
 class Mouse {
+    static const int x_len_ = 16, y_len_ = 16;
+    inline static constexpr unsigned char buf_graphic_[y_len_ + 1][x_len_ + 1] {
+        "*...............",
+        "**..............",
+        "*0*.............",
+        "*00*............",
+        "*000*...........",
+        "*0000*..........",
+        "*00000*.........",
+        "*000000*........",
+        "*0000000*.......",
+        "*00000****......",
+        "*00*00*.........",
+        "*0*.*00*........",
+        "**...*0*........",
+        "*....*00*.......",
+        "......***.......",
+        "................",
+    };
+
     unsigned char buf_[3];
     unsigned char phase_;
+    int x_, y_;
+    unsigned char buf_color_[y_len_][x_len_];
     Queue<128> queue_;
+
+    void SetColor(unsigned char background_color);
 
 public:
     bool Decode(unsigned char data);
     void PutInfo(int x, int y);
+    void PutPosition(int x, int y);
     void Enable();
     bool IsQueueEmpty();
     void Enqueue(unsigned char data);
     unsigned char Dequeue();
+    void SetCoord(int x, int y);
+    void Draw();
 };
 
 void InitKeyboard();

@@ -47,6 +47,25 @@ void Mouse::PutInfo(int x, int y)
     OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
 }
 
+void Mouse::SetColor(unsigned char background_color)
+{
+    for (int y = 0; y < y_len_; y++) {
+        for (int x = 0; x < x_len_; x++) {
+            switch (buf_graphic_[y][x]) {
+            case '*':
+                buf_color_[y][x] = (unsigned char)kColor000000;
+                break;
+            case '0':
+                buf_color_[y][x] = (unsigned char)kColorFFFFFF;
+                break;
+            case '.':
+                buf_color_[y][x] = (unsigned char)background_color;
+                break;
+            }
+        }
+    }
+}
+
 void Mouse::Enable()
 {
     WaitKBCSendReady();
@@ -55,6 +74,8 @@ void Mouse::Enable()
     IoOut8(kPortKeyData, kMouseCmdEnable);
 
     phase_ = 0;
+    SetColor(kColor008484);
+    Draw();
 }
 
 bool Mouse::IsQueueEmpty()
@@ -70,6 +91,26 @@ unsigned char Mouse::Dequeue()
 void Mouse::Enqueue(unsigned char data)
 {
     queue_.Enqueue(data);
+}
+
+void Mouse::SetCoord(int x, int y)
+{
+    x_ = x;
+    y_ = y;
+}
+
+void Mouse::Draw()
+{
+    const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
+    DrawBlock(boot_info->vram, boot_info->vram_x_len, x_len_, y_len_, x_, y_, (char*)buf_color_, x_len_);
+}
+
+void Mouse::PutPosition(int x, int y)
+{
+    const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
+    char s[40];
+    OSSPrintf(s, "(%d, %d)", x_, y_);
+    OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
 }
 
 void InitPic()
