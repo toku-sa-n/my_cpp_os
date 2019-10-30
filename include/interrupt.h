@@ -51,7 +51,11 @@ class Mouse {
     unsigned char buf_[3];
     unsigned char phase_;
     int x_ = 100, y_ = 100;
-    int next_x_, next_y_; // Destination to move
+    // SetCoord() assigns next_[xy]_.
+    // When Draw() is called, mouse cursor will be drawn at (next_x_, next_y_).
+    // Then [xy]_ and next_[xy]_ are swapped.
+    // This process is needed to erase the previous mouse and draw the new one.
+    int next_x_, next_y_;
     int moving_distance_x_, moving_distance_y_;
     int button_;
     unsigned char buf_color_[y_len_][x_len_];
