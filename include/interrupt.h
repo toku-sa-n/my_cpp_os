@@ -25,14 +25,20 @@ const int kKeyCmdSendToMouse     = 0xd4;
 const int kMouseCmdEnable        = 0xf4;
 // clang-format on
 
+#include "utils.h"
+
 class Mouse {
     unsigned char buf[3];
     unsigned char phase;
+    Queue<128> queue;
 
 public:
     bool Decode(unsigned char data);
     void PutInfo(int x, int y);
     void Enable();
+    bool IsQueueEmpty();
+    void Enqueue(unsigned char data);
+    unsigned char Dequeue();
 };
 
 void InitKeyboard();

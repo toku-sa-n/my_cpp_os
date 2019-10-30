@@ -57,6 +57,21 @@ void Mouse::Enable()
     phase = 0;
 }
 
+bool Mouse::IsQueueEmpty()
+{
+    return queue.GetNumElements() == 0;
+}
+
+unsigned char Mouse::Dequeue()
+{
+    return queue.Dequeue();
+}
+
+void Mouse::Enqueue(unsigned char data)
+{
+    queue.Enqueue(data);
+}
+
 void InitPic()
 {
     IoOut8(kPic0Imr, 0xff); // Master ignores all interrupt signals.
@@ -95,8 +110,8 @@ void InterruptHandler2c(int* esp)
 {
     IoOut8(kPic1Ocw2, 0x64);
     IoOut8(kPic0Ocw2, 0x62);
-    extern Queue<128> mouse_queue;
-    mouse_queue.Enqueue(IoIn8(kPortKeyData));
+    extern Mouse mouse;
+    mouse.Enqueue(IoIn8(kPortKeyData));
 }
 
 void InterruptHandler27(int* esp)
