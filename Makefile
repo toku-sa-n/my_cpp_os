@@ -24,7 +24,7 @@ ASMC			= nasm
 VIEWER			= qemu-system-i386
 CAT				= cat
 
-CXXFLAGS		= -std=c++17 -march=i486 -m32 -nostdlib -O0 -g -fno-pie -Wall -I ./include
+CXXFLAGS		= -std=c++17 -march=i486 -m32 -nostdlib -O2 -g -fno-pie -Wall -I ./include
 
 .SUFFIXES:
 
