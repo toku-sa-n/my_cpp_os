@@ -24,11 +24,10 @@ const int kMouseCmdEnable        = 0xf4;
 // clang-format on
 
 class MouseDecoder {
-    unsigned char phase;
     unsigned char buf[3];
+    unsigned char phase;
 
 public:
-    void Init();
     bool Decode(unsigned char data);
     void PutInfo(int x, int y);
     void Enable();

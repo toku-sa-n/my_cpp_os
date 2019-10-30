@@ -67,6 +67,7 @@ extern "C" void OSMain()
 {
     MouseDecoder mouse_decoder;
     InitOS(mouse_decoder);
+
     while (1) {
         MainLoop(mouse_decoder);
     }

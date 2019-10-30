@@ -13,11 +13,6 @@ void WaitKBCSendReady()
     }
 }
 
-void MouseDecoder::Init()
-{
-    phase = 0;
-}
-
 bool MouseDecoder::Decode(unsigned char data)
 {
     switch (phase) {
@@ -59,7 +54,7 @@ void MouseDecoder::Enable()
     WaitKBCSendReady();
     IoOut8(kPortKeyData, kMouseCmdEnable);
 
-    Init();
+    phase = 0;
 }
 
 void InitPic()
