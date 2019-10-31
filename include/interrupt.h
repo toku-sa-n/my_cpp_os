@@ -81,8 +81,6 @@ void WaitKBCSendReady();
 void InitKeyboard();
 void InitPic();
 
-bool decode_mouse(struct Mouse& mouse, unsigned char data);
-
 extern "C" {
 void InterruptHandler21(int* esp);
 void InterruptHandler27(int* esp);
