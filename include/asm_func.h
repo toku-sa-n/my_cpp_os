@@ -16,4 +16,7 @@ void LoadIdtr(int limit, int addr);
 void AsmInterruptHandler21();
 void AsmInterruptHandler27();
 void AsmInterruptHandler2c();
+
+int LoadCr0();
+void StoreCr0(int cr0);
 }

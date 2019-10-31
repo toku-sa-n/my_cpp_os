@@ -22,6 +22,9 @@
     global AsmInterruptHandler27
     global AsmInterruptHandler2c
 
+    global LoadCr0
+    global StoreCr0
+
     extern InterruptHandler21
     extern InterruptHandler27
     extern InterruptHandler2c
@@ -130,3 +133,12 @@ LoadIdtr:
 ASM_INTERRUPT_HANDLER 21
 ASM_INTERRUPT_HANDLER 27
 ASM_INTERRUPT_HANDLER 2c
+
+LoadCr0:
+    mov eax,cr0
+    ret
+
+StoreCr0:
+    mov eax,[esp+4]
+    mov cr0,eax
+    ret

@@ -2,6 +2,7 @@
 #include "descriptor_table.h"
 #include "graphics.h"
 #include "interrupt.h"
+#include "memory.h"
 #include "os.h"
 #include "utils.h"
 
@@ -58,6 +59,10 @@ void InitOS()
 
     InitKeyboard();
     mouse.Enable();
+
+    char s[40];
+    OSSPrintf(s, "memory %dMB", CheckMemorySize(0x00400000, 0xbfffffff) / (1024 * 1024));
+    OSPuts(boot_info->vram, boot_info->vram_x_len, 0, 32, kColorFFFFFF, (unsigned char*)s);
 }
 
 extern "C" void OSMain()
