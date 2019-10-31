@@ -99,6 +99,7 @@ int main()
     TestBetween<typename>(num_test, num_success, value, from, to, expected);
 
     TEST_BETWEEN(int, 3, 0, 5, 3);
+    TEST_BETWEEN(int, 4, 0, 5, 4);
 
 #undef TEST_BETWEEN
 
