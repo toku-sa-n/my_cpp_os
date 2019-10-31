@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include "interrupt.h"
 #include "os.h"
+#include "utils.h"
 
 bool Mouse::Decode(unsigned char data)
 {
@@ -46,11 +47,10 @@ bool Mouse::Decode(unsigned char data)
         next_x_ = x_ + moving_distance_x_;
         next_y_ = y_ + moving_distance_y_;
 
-#define BETWEEN(x, from, to) \
-    x = (x < from ? from : (x > to ? to : x))
-        const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
-        BETWEEN(next_x_, 0, boot_info->vram_x_len - x_len_);
-        BETWEEN(next_y_, 0, boot_info->vram_y_len - y_len_);
+        const struct BootInfo* boot_info
+            = (const struct BootInfo*)kAddrBootInfo;
+        next_x_ = Between<int>(next_x_, 0, boot_info->vram_x_len - x_len_);
+        next_y_ = Between<int>(next_y_, 0, boot_info->vram_y_len - y_len_);
 #undef BETWEEN
 
         return true;
