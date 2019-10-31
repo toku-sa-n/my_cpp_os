@@ -57,7 +57,7 @@ bool TestBetween(int& num_test, int& num_success, T value, T from, T to, T expec
     ShowErrMsg("TestBetween failed!\n"
                "Value: "
             + std::to_string(value) + "\n"
-                                      "From: "
+                                      "From:  "
             + std::to_string(from) + "\n"
                                      "To:    "
             + std::to_string(to) + "\n",
