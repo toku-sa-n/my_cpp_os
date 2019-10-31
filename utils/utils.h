@@ -6,5 +6,13 @@ int OSVSPrintf(char* str, const char* format, va_list ap);
 template <typename T>
 T Between(const T value, const T from, const T to)
 {
-    return 3;
+    if (value < from) {
+        return from;
+    }
+
+    if (value > to) {
+        return to;
+    }
+
+    return value;
 }
