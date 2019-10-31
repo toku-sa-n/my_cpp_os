@@ -1,10 +1,9 @@
+#include "../utils/utils.h"
 #include <cstring>
 #include <iostream>
 #include <stdarg.h>
 
 const int kBufferSize = 1024;
-
-int OSVSPrintf(char* str, const char* format, va_list ap);
 
 auto ShowErrMsg = [](std::string msg, auto expected, auto actual) {
     std::cout << std::endl;
@@ -45,6 +44,27 @@ bool TestOSVSPrintf(int& num_test, int& num_success, const char* format, ...)
     return true;
 }
 
+template <typename T>
+bool TestBetween(int& num_test, int& num_success, T value, T from, T to, T expected)
+{
+    num_test++;
+    T actual;
+    if ((actual = Between(value, from, to)) == expected) {
+        num_success++;
+        return true;
+    }
+
+    ShowErrMsg("TestBetween failed!\n"
+               "Value: "
+            + std::to_string(value) + "\n"
+                                      "From: "
+            + std::to_string(from) + "\n"
+                                     "To:    "
+            + std::to_string(to) + "\n",
+        expected, actual);
+    return false;
+}
+
 int main()
 {
     int num_test = 0, num_success = 0;
@@ -74,6 +94,13 @@ int main()
     TEST_OS_VSPRINTF("%c", 'a');
     TEST_OS_VSPRINTF("%c%c%c", 'R', 'G', 'B');
 #undef TEST_OS_VSPRINTF
+
+#define TEST_BETWEEN(typename, value, from, to, expected) \
+    TestBetween<typename>(num_test, num_success, value, from, to, expected);
+
+    TEST_BETWEEN(int, 3, 0, 5, 3);
+
+#undef TEST_BETWEEN
 
     std::cout << "The number of tests  : " << num_test << std::endl;
     std::cout << "The number of success: " << num_success << std::endl;
