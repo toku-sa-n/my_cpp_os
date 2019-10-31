@@ -6,6 +6,16 @@ const int kBufferSize = 1024;
 
 int OSVSPrintf(char* str, const char* format, va_list ap);
 
+auto ShowErrMsg = [](std::string msg, auto expected, auto actual) {
+    std::cout << std::endl;
+    std::cout << "--------------------------------" << std::endl;
+    std::cout << msg << std::endl;
+    std::cout << std::endl;
+    std::cout << "Expected: " << expected << std::endl;
+    std::cout << "  Actual: " << actual << std::endl;
+    std::cout << "--------------------------------" << std::endl;
+};
+
 bool TestOSVSPrintf(int& num_test, int& num_success, const char* format, ...)
 {
     num_test++;
@@ -21,24 +31,13 @@ bool TestOSVSPrintf(int& num_test, int& num_success, const char* format, ...)
     int builtin_count = vsprintf(builtin_buf, format, ap);
     va_end(ap);
 
-    auto error_msg = [=](std::string message, auto expected, auto actual) {
-        std::cout << std::endl;
-        std::cout << "--------------------------------" << std::endl;
-        std::cout << message << std::endl;
-        std::cout << "  Format: " << format << std::endl;
-        std::cout << std::endl;
-        std::cout << "Expected: " << expected << std::endl;
-        std::cout << "  Actual: " << actual << std::endl;
-        std::cout << "--------------------------------" << std::endl;
-    };
-
     if (os_count != builtin_count) {
-        error_msg("Wrong return value!", builtin_count, os_count);
+        ShowErrMsg("Wrong return value!\n  Format: " + std::string(format), builtin_count, os_count);
         return false;
     }
 
     if (strcmp(os_buf, builtin_buf)) {
-        error_msg("Test failed!", builtin_buf, os_buf);
+        ShowErrMsg("Test failed!\n  Format: " + std::string(format), builtin_buf, os_buf);
         return false;
     }
 
