@@ -101,6 +101,7 @@ int main()
     TEST_BETWEEN(int, 3, 0, 5, 3);
     TEST_BETWEEN(int, 4, 0, 5, 4);
     TEST_BETWEEN(int, 9, 0, 5, 5);
+    TEST_BETWEEN(int, -5, 0, 5, 0);
 
 #undef TEST_BETWEEN
 
