@@ -19,4 +19,6 @@ void AsmInterruptHandler2c();
 
 int LoadCr0();
 void StoreCr0(int cr0);
+
+unsigned AsmCheckMemorySize(unsigned start, unsigned end);
 }

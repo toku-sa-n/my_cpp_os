@@ -25,6 +25,8 @@
     global LoadCr0
     global StoreCr0
 
+    global AsmCheckMemorySize
+
     extern InterruptHandler21
     extern InterruptHandler27
     extern InterruptHandler2c
@@ -141,4 +143,54 @@ LoadCr0:
 StoreCr0:
     mov eax,[esp+4]
     mov cr0,eax
+    ret
+
+; unsigned int AsmCheckMemorySize(unsigned start, unsigned end)
+AsmCheckMemorySize:
+    push edi
+    push esi
+    push ebx
+    mov esi,0xaa55aa55
+    mov edi,0x55aa55aa
+
+    ; eax = start;
+    mov eax,[esp+12+4]
+
+; Assign a value into [eax] and reverse all bits of that place.
+; The bits reversion will be done twice.
+; If the reversion succeeds, then go to the next bit.
+; Otherwise regard the last-succeess bit as the limit of memory.
+; eax: Iterator
+; ebx: Memory to check
+; edx: Data on [ebx]. When checking memory, the value of checked memory will be changed.
+; edx will be used to save the value in the memory.
+check_memory_size_loop:
+    mov ebx,eax
+    add ebx,0xffc
+    mov edx,[ebx]
+    mov [ebx],esi
+    xor dword [ebx],0xffffffff
+
+    ; If bits reversion fails, end loop.
+    cmp edi,[ebx]
+    jne check_memory_size_fin
+
+    ; Second trial of reversing bits.
+    xor dword [ebx],0xffffffff
+    cmp esi,[ebx]
+    jne check_memory_size_fin
+
+    ; Restore the value of [ebx]
+    mov [ebx],edx
+
+    ; Loop continuation condition.
+    add eax,0x1000
+    cmp eax,[esp+12+8]
+    jbe check_memory_size_loop
+
+check_memory_size_fin:
+    mov [ebx],edx
+    pop ebx
+    pop esi
+    pop edi
     ret
