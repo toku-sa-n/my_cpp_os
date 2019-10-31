@@ -4,7 +4,7 @@
 #include "os.h"
 #include "utils.h"
 
-bool Mouse::Decode(unsigned char data)
+bool MousePointer::Decode(unsigned char data)
 {
     switch (phase_) {
     case 0:
@@ -58,7 +58,7 @@ bool Mouse::Decode(unsigned char data)
     return true;
 }
 
-void Mouse::PutInfo(int x, int y)
+void MousePointer::PutInfo(int x, int y)
 {
     struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
 
@@ -72,7 +72,7 @@ void Mouse::PutInfo(int x, int y)
     OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
 }
 
-void Mouse::PutPosition(int x, int y)
+void MousePointer::PutPosition(int x, int y)
 {
     const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
     DrawBox(boot_info->vram, boot_info->vram_x_len, kColorBackGround, x, y, x + 79, y + 15);
@@ -81,7 +81,7 @@ void Mouse::PutPosition(int x, int y)
     OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
 }
 
-void Mouse::Draw()
+void MousePointer::Draw()
 {
     const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
     DrawBox(boot_info->vram, boot_info->vram_x_len, kColorBackGround, x_, y_, x_ + x_len_ - 1, y_ + y_len_ - 1);
@@ -91,7 +91,7 @@ void Mouse::Draw()
     y_ = next_y_;
 }
 
-void Mouse::Enable()
+void MousePointer::Enable()
 {
     WaitKBCSendReady();
     IoOut8(kPortKeyCmd, kKeyCmdSendToMouse);
@@ -103,13 +103,13 @@ void Mouse::Enable()
     Draw();
 }
 
-void Mouse::SetCoord(int x, int y)
+void MousePointer::SetCoord(int x, int y)
 {
     next_x_ = x;
     next_y_ = y;
 }
 
-void Mouse::SetColor(unsigned char background_color)
+void MousePointer::SetColor(unsigned char background_color)
 {
     for (int y = 0; y < y_len_; y++) {
         for (int x = 0; x < x_len_; x++) {
