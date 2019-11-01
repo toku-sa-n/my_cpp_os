@@ -75,9 +75,25 @@ int Queue<QueueSize>::GetNumElements()
     return QueueSize - num_free_;
 }
 
+///
+/// @brief sprintf function for my cpp os
+/// @details This function supports these format specifiers: %%d, %%X, %%c
+///
 int OSSPrintf(char* str, const char* format, ...);
+
+///
+/// @brief vsprintf function for my cpp os
+/// @details This function supports these format specifiers: %%d, %%X, %%c
+///
 int OSVSPrintf(char* str, const char* format, va_list ap);
 
+///
+/// @brief Fit a value between two values.
+/// @param value Value to fit.
+/// @param from Lower limit of value range.
+/// @param to Upper limit of value range.
+/// @return If value < from then return from. If value > to then return to. Otherwise return value.
+///
 template <typename T>
 T Between(const T value, const T from, const T to)
 {

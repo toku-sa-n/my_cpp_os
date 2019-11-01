@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getnumelements',['GetNumElements',['../classQueue.html#a330701634d1a884df66907aef83cec03',1,'Queue']]]
+  ['enqueue',['Enqueue',['../classQueue.html#ad947fcb87c1af020ba44d783e070e165',1,'Queue']]]
 ];

@@ -87,20 +87,142 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aed449736e224d8d7e834e35d1a8fba35"><td class="memItemLeft" align="right" valign="top"><a id="aed449736e224d8d7e834e35d1a8fba35"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>OSSPrintf</b> (char *str, const char *format,...)</td></tr>
+<tr class="memitem:aed449736e224d8d7e834e35d1a8fba35"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils_8h.html#aed449736e224d8d7e834e35d1a8fba35">OSSPrintf</a> (char *str, const char *format,...)</td></tr>
+<tr class="memdesc:aed449736e224d8d7e834e35d1a8fba35"><td class="mdescLeft">&#160;</td><td class="mdescRight">sprintf function for my cpp os  <a href="#aed449736e224d8d7e834e35d1a8fba35">More...</a><br /></td></tr>
 <tr class="separator:aed449736e224d8d7e834e35d1a8fba35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8987ac41f1088a40aeced66a4a0b1640"><td class="memItemLeft" align="right" valign="top"><a id="a8987ac41f1088a40aeced66a4a0b1640"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>OSVSPrintf</b> (char *str, const char *format, va_list ap)</td></tr>
+<tr class="memitem:a8987ac41f1088a40aeced66a4a0b1640"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils_8h.html#a8987ac41f1088a40aeced66a4a0b1640">OSVSPrintf</a> (char *str, const char *format, va_list ap)</td></tr>
+<tr class="memdesc:a8987ac41f1088a40aeced66a4a0b1640"><td class="mdescLeft">&#160;</td><td class="mdescRight">vsprintf function for my cpp os  <a href="#a8987ac41f1088a40aeced66a4a0b1640">More...</a><br /></td></tr>
 <tr class="separator:a8987ac41f1088a40aeced66a4a0b1640"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0bb8389d47930d44c24192a9d7a7397"><td class="memTemplParams" colspan="2"><a id="ae0bb8389d47930d44c24192a9d7a7397"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ae0bb8389d47930d44c24192a9d7a7397"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Between</b> (const T value, const T from, const T to)</td></tr>
+<tr class="memitem:ae0bb8389d47930d44c24192a9d7a7397"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae0bb8389d47930d44c24192a9d7a7397"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="utils_8h.html#ae0bb8389d47930d44c24192a9d7a7397">Between</a> (const T value, const T from, const T to)</td></tr>
+<tr class="memdesc:ae0bb8389d47930d44c24192a9d7a7397"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fit a value between two values.  <a href="#ae0bb8389d47930d44c24192a9d7a7397">More...</a><br /></td></tr>
 <tr class="separator:ae0bb8389d47930d44c24192a9d7a7397"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This header contains miscellaneous functions. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="ae0bb8389d47930d44c24192a9d7a7397"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0bb8389d47930d44c24192a9d7a7397">&#9670;&nbsp;</a></span>Between()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T Between </td>
+          <td>(</td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>from</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>to</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Fit a value between two values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Value to fit. </td></tr>
+    <tr><td class="paramname">from</td><td>Lower limit of value range. </td></tr>
+    <tr><td class="paramname">to</td><td>Upper limit of value range. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>If value &lt; from then return from. If value &gt; to then return to. Otherwise return value. </dd></dl>
+
+</div>
+</div>
+<a id="aed449736e224d8d7e834e35d1a8fba35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed449736e224d8d7e834e35d1a8fba35">&#9670;&nbsp;</a></span>OSSPrintf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int OSSPrintf </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>sprintf function for my cpp os </p>
+<p>This function supports these format specifiers: %d, %X, %c </p>
+
+</div>
+</div>
+<a id="a8987ac41f1088a40aeced66a4a0b1640"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8987ac41f1088a40aeced66a4a0b1640">&#9670;&nbsp;</a></span>OSVSPrintf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int OSVSPrintf </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list&#160;</td>
+          <td class="paramname"><em>ap</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>vsprintf function for my cpp os </p>
+<p>This function supports these format specifiers: %d, %X, %c </p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
