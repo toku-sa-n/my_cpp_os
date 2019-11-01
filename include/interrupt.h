@@ -80,6 +80,7 @@ public:
     /// @details The format of information is as below.
     /// @n
     /// [lcr (X speed) (Y speed)]
+    /// If left, center or right button is pressed, l, c or r will be upper respectively.
     void PutInfo(int x, int y);
 
     /// @brief Put the coordinates of mouse pointer.
