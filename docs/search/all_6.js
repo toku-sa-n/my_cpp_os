@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['putinfo',['PutInfo',['../classMousePointer.html#a120678b87f46eeec1b1048b34a7cfdad',1,'MousePointer']]],
-  ['putposition',['PutPosition',['../classMousePointer.html#a64f0800c81c91ac151773912e678e969',1,'MousePointer']]]
+  ['ossprintf',['OSSPrintf',['../utils_8h.html#aed449736e224d8d7e834e35d1a8fba35',1,'utils.h']]],
+  ['osvsprintf',['OSVSPrintf',['../utils_8h.html#a8987ac41f1088a40aeced66a4a0b1640',1,'utils.h']]]
 ];

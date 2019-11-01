@@ -1,3 +1,8 @@
+///
+/// @file interrupt.h
+///
+/// @brief This header contains functions related to interruption.
+///
 #pragma once
 
 // clang-format off
@@ -104,7 +109,10 @@ void InitKeyboard();
 void InitPic();
 
 extern "C" {
+/// @brief Function which runs when interruption from keyboard happens.
 void InterruptHandler21(int* esp);
+
+/// @brief Function which runs when interruption from mouse device happens.
 void InterruptHandler27(int* esp);
 void InterruptHandler2c(int* esp);
 }

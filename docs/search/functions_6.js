@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['setcoord',['SetCoord',['../classMousePointer.html#a8f02645b423e9589e44d090c6bd71d0d',1,'MousePointer']]]
+  ['putinfo',['PutInfo',['../classMousePointer.html#a120678b87f46eeec1b1048b34a7cfdad',1,'MousePointer']]],
+  ['putposition',['PutPosition',['../classMousePointer.html#a64f0800c81c91ac151773912e678e969',1,'MousePointer']]]
 ];
