@@ -6,7 +6,7 @@ branches:
 
 addons:
     apt:
-        package:
+        packages:
             - doxygen
 
 script:
