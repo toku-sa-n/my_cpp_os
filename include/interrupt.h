@@ -31,6 +31,9 @@ const int kMouseCmdEnable        = 0xf4;
 // and doesn't contain queue for keeping data from mouse interruption.
 // But for keeping the most recent three byte, buf_[3] can be used.
 // This array is used to know where mouse moves to and which buttons are pressed.
+
+/// @brief Class about mouse pointer.
+/// @todo Extract fields and methods which are related to mouse device, not mouse pointer.
 class MousePointer {
     static const int x_len_ = 16, y_len_ = 16;
     inline static constexpr unsigned char buf_graphic_[y_len_ + 1][x_len_ + 1] {
@@ -59,6 +62,8 @@ class MousePointer {
     // When Draw() is called, mouse cursor will be drawn at (next_x_, next_y_).
     // Then [xy]_ and next_[xy]_ are swapped.
     // This process is needed to erase the previous mouse and draw the new one.
+
+    /// @brief Next position of mouse pointer.
     int next_x_, next_y_;
     int moving_distance_x_, moving_distance_y_;
     int button_;
@@ -69,11 +74,28 @@ class MousePointer {
 public:
     bool Decode(unsigned char data);
 
+    /// @brief Put the information of mouse pointer on the screen
+    /// @param x X coordinate of top left of output.
+    /// @param y Y coordinate of top left of output.
+    /// @details The format of information is as below.
+    /// @n
+    /// [lcr (X speed) (Y speed)]
     void PutInfo(int x, int y);
+
+    /// @brief Put the coordinates of mouse pointer.
+    /// @param x X coordinate of top left of output.
+    /// @param y Y coordinate of top left of output.
     void PutPosition(int x, int y);
+
+    /// @brief Draw mouse pointer on the screen.
     void Draw();
 
+    /// @brief Enable mouse device.
+    /// @todo Move this method to MouseDevice class.
     void Enable();
+
+    /// @brief Set the next position where mouse pointer moves to.
+    /// @todo Awkward! Improve this.
     void SetCoord(int x, int y);
 };
 
