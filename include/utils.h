@@ -6,6 +6,10 @@
 #pragma once
 #include <cstdarg>
 
+///
+/// @class Queue
+/// @brief Ring queue
+///
 template <unsigned QueueSize>
 class Queue {
     const int kFlagsOverRun_ = 1;
@@ -16,8 +20,23 @@ class Queue {
     int flags_ = 0;
 
 public:
+    ///
+    /// @brief Add an element to queue.
+    /// @param data Element to add.
+    /// @return Return false if queue is full, otherwise return true.
+    ///
     bool Enqueue(unsigned char data);
+
+    ///
+    /// @brief Get the element which is top of queue.
+    /// @return Return false if queue is empty, otherwise return true.
+    ///
     int Dequeue();
+
+    ///
+    /// @brief Return the number of elements in queue.
+    /// @return The number of elements in queue.
+    ///
     int GetNumElements();
 };
 
