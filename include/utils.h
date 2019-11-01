@@ -1,3 +1,8 @@
+/*
+ * @file utils.h
+
+ * @brief This header contains miscellaneous functions.
+**/
 #pragma once
 #include <cstdarg>
 
