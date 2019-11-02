@@ -83,6 +83,10 @@ class MouseDevice {
     int button_;
 
 public:
+    /// @brief Put a data sent by mouse device interruption into 3-bytes buffer. If buffer becomes full, get informations about the movement of mouse device.
+    /// @param data Data to put into a buffer.
+    /// @param mouse_pointer A mouse_pointer handler. When buffer becomes full, information will be sent to it.
+    /// @return Return true if buffer becomes full or something wrong, otherwise return false.
     bool Decode(unsigned char data, MousePointer& mouse_pointer);
 
     /// @brief Put the information of mouse pointer on the screen
