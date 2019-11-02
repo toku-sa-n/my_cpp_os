@@ -75,6 +75,7 @@ public:
     void MoveBy(int x, int y);
 };
 
+/// @brief Class about mouse device.
 class MouseDevice {
     unsigned char buf_[3];
     unsigned char phase_;
