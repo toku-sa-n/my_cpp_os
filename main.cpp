@@ -29,7 +29,7 @@ void MainLoop(MouseDevice& mouse_device, MousePointer& mouse_pointer)
         int mouse_data = mouse_queue.Dequeue();
         IoSti();
 
-        if (mouse_device.Decode(mouse_data, mouse_pointer)) {
+        if (mouse_device.PutInterruptionData(mouse_data, mouse_pointer)) {
             mouse_device.PutInfo(16, 32);
             mouse_pointer.PutPosition(0, 0);
             mouse_pointer.Draw();

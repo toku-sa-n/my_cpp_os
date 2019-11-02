@@ -29,7 +29,25 @@ MousePointer::MousePointer()
     next_y_ = y_;
 }
 
-bool MouseDevice::Decode(const unsigned char data, MousePointer& mouse_pointer)
+void MouseDevice::DecodeDataInBuf(MousePointer& mouse_pointer)
+{
+    button_ = buf_[0] & 0x07;
+    moving_distance_x_ = buf_[1];
+    moving_distance_y_ = buf_[2];
+    if (buf_[0] & 0x10) {
+        moving_distance_x_ |= 0xffffff00;
+    }
+
+    if (buf_[0] & 0x20) {
+        moving_distance_y_ |= 0xffffff00;
+    }
+
+    // The sign of y direction of mouse is the opposite with the screen.
+    // By reversing the sign, the y direction of mouse will be the same with the screen.
+    mouse_pointer.MoveBy(moving_distance_x_, -moving_distance_y_);
+}
+
+bool MouseDevice::PutInterruptionData(const unsigned char data, MousePointer& mouse_pointer)
 {
     switch (phase_) {
     case 0:
@@ -54,21 +72,8 @@ bool MouseDevice::Decode(const unsigned char data, MousePointer& mouse_pointer)
     case 3:
         buf_[2] = data;
         phase_ = 1;
-        button_ = buf_[0] & 0x07;
-        moving_distance_x_ = buf_[1];
-        moving_distance_y_ = buf_[2];
-        if (buf_[0] & 0x10) {
-            moving_distance_x_ |= 0xffffff00;
-        }
 
-        if (buf_[0] & 0x20) {
-            moving_distance_y_ |= 0xffffff00;
-        }
-
-        // The sign of y direction of mouse is the opposite with the screen.
-        // By reversing the sign, the y direction of mouse will be the same with the screen.
-        mouse_pointer.MoveBy(moving_distance_x_, -moving_distance_y_);
-
+        DecodeDataInBuf(mouse_pointer);
         return true;
     }
     return true;
