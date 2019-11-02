@@ -11,7 +11,6 @@ Queue<128> mouse_queue;
 
 void MainLoop(MouseDevice& mouse_device, MousePointer& mouse_pointer)
 {
-    const struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
     IoCli();
     if (key_queue.GetNumElements() + mouse_queue.GetNumElements() == 0) {
         IoStiHlt();
@@ -46,8 +45,6 @@ void InitOS(MouseDevice& mouse_device, MousePointer& mouse_pointer)
     IoSti();
 
     InitPalette();
-    const struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
-
     InitScreen(boot_info->vram, boot_info->vram_x_len, boot_info->vram_y_len);
 
     mouse_pointer.PutPosition(0, 0);

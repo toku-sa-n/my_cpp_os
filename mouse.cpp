@@ -22,7 +22,6 @@ MousePointer::MousePointer()
         }
     }
 
-    const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
     x_ = (boot_info->vram_x_len - x_len_) / 2;
     y_ = (boot_info->vram_y_len - y_len_ - 28) / 2;
 
@@ -77,8 +76,6 @@ bool MouseDevice::Decode(const unsigned char data, MousePointer& mouse_pointer)
 
 void MouseDevice::PutInfo(int x, int y)
 {
-    struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
-
     char s[40];
     OSSPrintf(s, "[%c%c%c %4d %4d]",
         (button_ & 0x01 ? 'L' : 'l'),
@@ -101,7 +98,6 @@ void MouseDevice::Enable()
 
 void MousePointer::PutPosition(int x, int y)
 {
-    const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
     DrawBox(boot_info->vram, boot_info->vram_x_len, kColorBackGround, x, y, x + 79, y + 15);
     char s[40];
     OSSPrintf(s, "(%d, %d)", x_, y_);
@@ -110,7 +106,6 @@ void MousePointer::PutPosition(int x, int y)
 
 void MousePointer::Draw()
 {
-    const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
     DrawBox(boot_info->vram, boot_info->vram_x_len, kColorBackGround, x_, y_, x_ + x_len_ - 1, y_ + y_len_ - 1);
     DrawBlock(boot_info->vram, boot_info->vram_x_len, x_len_, y_len_, next_x_, next_y_, (char*)buf_color_, x_len_);
 
@@ -120,7 +115,6 @@ void MousePointer::Draw()
 
 void MousePointer::MoveBy(int x, int y)
 {
-    const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
     next_x_ = Between(x_ + x, 0, boot_info->vram_x_len - x_len_);
     next_y_ = Between(y_ + y, 0, boot_info->vram_y_len - y_len_);
 }
