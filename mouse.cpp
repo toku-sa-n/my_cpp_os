@@ -4,7 +4,33 @@
 #include "os.h"
 #include "utils.h"
 
-bool MousePointer::Decode(unsigned char data)
+MousePointer::MousePointer()
+{
+    for (int y = 0; y < y_len_; y++) {
+        for (int x = 0; x < x_len_; x++) {
+            switch (buf_graphic_[y][x]) {
+            case '*':
+                buf_color_[y][x] = (unsigned char)kColor000000;
+                break;
+            case '0':
+                buf_color_[y][x] = (unsigned char)kColorFFFFFF;
+                break;
+            case '.':
+                buf_color_[y][x] = (unsigned char)kColorBackGround;
+                break;
+            }
+        }
+    }
+
+    const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
+    x_ = (boot_info->vram_x_len - x_len_) / 2;
+    y_ = (boot_info->vram_y_len - y_len_ - 28) / 2;
+
+    next_x_ = x_;
+    next_y_ = y_;
+}
+
+bool MouseDevice::Decode(const unsigned char data, MousePointer& mouse_pointer)
 {
     switch (phase_) {
     case 0:
@@ -42,23 +68,14 @@ bool MousePointer::Decode(unsigned char data)
 
         // The sign of y direction of mouse is the opposite with the screen.
         // By reversing the sign, the y direction of mouse will be the same with the screen.
-        moving_distance_y_ = -moving_distance_y_;
-
-        next_x_ = x_ + moving_distance_x_;
-        next_y_ = y_ + moving_distance_y_;
-
-        const struct BootInfo* boot_info
-            = (const struct BootInfo*)kAddrBootInfo;
-        next_x_ = Between<int>(next_x_, 0, boot_info->vram_x_len - x_len_);
-        next_y_ = Between<int>(next_y_, 0, boot_info->vram_y_len - y_len_);
-#undef BETWEEN
+        mouse_pointer.MoveBy(moving_distance_x_, -moving_distance_y_);
 
         return true;
     }
     return true;
 }
 
-void MousePointer::PutInfo(int x, int y)
+void MouseDevice::PutInfo(int x, int y)
 {
     struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
 
@@ -70,6 +87,16 @@ void MousePointer::PutInfo(int x, int y)
         moving_distance_x_, moving_distance_y_);
     DrawBox(boot_info->vram, boot_info->vram_x_len, kColorBackGround, x, y, x + 15 * 8 - 1, y + 15);
     OSPuts(boot_info->vram, boot_info->vram_x_len, x, y, kColorFFFFFF, (unsigned char*)s);
+}
+
+void MouseDevice::Enable()
+{
+    WaitKBCSendReady();
+    IoOut8(kPortKeyCmd, kKeyCmdSendToMouse);
+    WaitKBCSendReady();
+    IoOut8(kPortKeyData, kMouseCmdEnable);
+
+    phase_ = 0;
 }
 
 void MousePointer::PutPosition(int x, int y)
@@ -91,39 +118,9 @@ void MousePointer::Draw()
     y_ = next_y_;
 }
 
-void MousePointer::Enable()
+void MousePointer::MoveBy(int x, int y)
 {
-    WaitKBCSendReady();
-    IoOut8(kPortKeyCmd, kKeyCmdSendToMouse);
-    WaitKBCSendReady();
-    IoOut8(kPortKeyData, kMouseCmdEnable);
-
-    phase_ = 0;
-    SetColor(kColorBackGround);
-    Draw();
-}
-
-void MousePointer::SetCoord(int x, int y)
-{
-    next_x_ = x;
-    next_y_ = y;
-}
-
-void MousePointer::SetColor(unsigned char background_color)
-{
-    for (int y = 0; y < y_len_; y++) {
-        for (int x = 0; x < x_len_; x++) {
-            switch (buf_graphic_[y][x]) {
-            case '*':
-                buf_color_[y][x] = (unsigned char)kColor000000;
-                break;
-            case '0':
-                buf_color_[y][x] = (unsigned char)kColorFFFFFF;
-                break;
-            case '.':
-                buf_color_[y][x] = (unsigned char)background_color;
-                break;
-            }
-        }
-    }
+    const struct BootInfo* boot_info = (const struct BootInfo*)kAddrBootInfo;
+    next_x_ = Between(x_ + x, 0, boot_info->vram_x_len - x_len_);
+    next_y_ = Between(y_ + y, 0, boot_info->vram_y_len - y_len_);
 }

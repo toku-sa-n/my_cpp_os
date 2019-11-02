@@ -9,8 +9,7 @@
 Queue<32> key_queue;
 Queue<128> mouse_queue;
 
-MousePointer mouse_pointer;
-void MainLoop()
+void MainLoop(MouseDevice& mouse_device, MousePointer& mouse_pointer)
 {
     const struct BootInfo* boot_info = (struct BootInfo*)kAddrBootInfo;
     IoCli();
@@ -31,15 +30,15 @@ void MainLoop()
         int mouse_data = mouse_queue.Dequeue();
         IoSti();
 
-        if (mouse_pointer.Decode(mouse_data)) {
-            mouse_pointer.PutInfo(16, 32);
+        if (mouse_device.Decode(mouse_data, mouse_pointer)) {
+            mouse_device.PutInfo(16, 32);
             mouse_pointer.PutPosition(0, 0);
             mouse_pointer.Draw();
         }
     }
 }
 
-void InitOS()
+void InitOS(MouseDevice& mouse_device, MousePointer& mouse_pointer)
 {
     InitGdtIdt();
     InitPic();
@@ -51,25 +50,28 @@ void InitOS()
 
     InitScreen(boot_info->vram, boot_info->vram_x_len, boot_info->vram_y_len);
 
-    mouse_pointer.SetCoord((boot_info->vram_x_len - 16) / 2, (boot_info->vram_y_len - 28 - 16) / 2);
     mouse_pointer.PutPosition(0, 0);
 
     IoOut8(kPic0Imr, 0xf9); // Accept interrupt from Pic1 and keyboard
     IoOut8(kPic1Imr, 0xef); // Accept interrupt from mouse
 
     InitKeyboard();
-    mouse_pointer.Enable();
+    mouse_device.Enable();
 
     char s[40];
     OSSPrintf(s, "memory %dMB", CheckMemorySize(0x00400000, 0xbfffffff) / (1024 * 1024));
     OSPuts(boot_info->vram, boot_info->vram_x_len, 0, 32, kColorFFFFFF, (unsigned char*)s);
+
+    mouse_pointer.Draw();
 }
 
 extern "C" void OSMain()
 {
-    InitOS();
+    MousePointer mouse_pointer;
+    MouseDevice mouse_device;
+    InitOS(mouse_device, mouse_pointer);
 
     while (1) {
-        MainLoop();
+        MainLoop(mouse_device, mouse_pointer);
     }
 }
