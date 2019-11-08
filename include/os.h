@@ -19,3 +19,7 @@ struct BootInfo {
     short vram_x_len, vram_y_len;
     unsigned char* vram;
 };
+
+/// A const pointer to a const struct Bootinfo.
+/// See: https://stackoverflow.com/questions/1143262/what-is-the-difference-between-const-int-const-int-const-and-int-const
+struct BootInfo const* const boot_info = (struct BootInfo const* const)kAddrBootInfo;

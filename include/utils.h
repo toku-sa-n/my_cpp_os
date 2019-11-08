@@ -95,7 +95,7 @@ int OSVSPrintf(char* str, const char* format, va_list ap);
 /// @return If value < from then return from. If value > to then return to. Otherwise return value.
 ///
 template <typename T>
-T Between(const T value, const T from, const T to)
+inline T Between(const T value, const T from, const T to)
 {
     if (value < from) {
         return from;

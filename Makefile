@@ -19,29 +19,29 @@ IMG_FILE		:= $(BUILD_DIR)/os.img
 
 DEPS			:= $(addprefix $(BUILD_DIR)/, $(CXX_SRC:%.cpp=%.cpp.d))
 
-CXX				= gcc
+CXX				= g++
 ASMC			= nasm
 VIEWER			= qemu-system-i386
 CAT				= cat
 
-CXXFLAGS		= -std=c++17 -march=i486 -m32 -nostdlib -O2 -g -fno-pie -Wall -I ./include
+CXXFLAGS		= -std=c++17 -march=i486 -m32 -nostdlib -O2 -g -fno-pie -Wall -I ./include -ffreestanding
 
 .SUFFIXES:
 
 .PHONY=run
 
-$(IMG_FILE):$(IPL_FILE) $(MAIN_FILE) Makefile|$(BUILD_DIR)
+$(IMG_FILE):$(IPL_FILE) $(MAIN_FILE)|$(BUILD_DIR)
 	mformat -f 1440 -C -B $(IPL_FILE) -i $@ ::
 	mcopy $(MAIN_FILE) -i $@ ::
 
-$(MAIN_FILE):$(HEAD_FILE) $(BODY_FILE) Makefile|$(BUILD_DIR)
+$(MAIN_FILE):$(HEAD_FILE) $(BODY_FILE)|$(BUILD_DIR)
 	$(CAT) $^ > $@
 
-$(BODY_FILE):$(BODY_COMPONENTS) $(LD_SRC) Makefile|$(BUILD_DIR)
+$(BODY_FILE):$(BODY_COMPONENTS) $(LD_SRC)|$(BUILD_DIR)
 	make -C utils/
 	$(CXX) $(CXXFLAGS) -T $(LD_SRC) -o $@ $(BODY_COMPONENTS) $(UTILS_FILE)
 
-$(BUILD_DIR)/asm_func.asm.o:asm_func.asm Makefile|$(BUILD_DIR)
+$(BUILD_DIR)/asm_func.asm.o:asm_func.asm|$(BUILD_DIR)
 	$(ASMC) -g -f elf $< -o $@
 
 $(BUILD_DIR)/nasm_func.asm.o:nasm_func.asm|$(BUILD_DIR)
